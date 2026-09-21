@@ -4,19 +4,21 @@ subtitle: "Organize Claude's work with the Tasks API"
 card-number: "M06"
 category: "Methodology"
 difficulty: "intermediate"
-guide-version: "3.41.0"
+guide-version: "3.41.3"
 author: "Florian BRUNIAUX"
-version: "3.41.0"
-date: "May 2026"
+version: "3.41.3"
+date: "August 2026"
 layout: "two-col"
 lang: en
 format:
   recap-card-typst: default
 ---
 
+> **v2.1.233**: on Opus 4.8, Sonnet 5, Fable 5, Mythos 5, and newer models, the Tasks API (and TodoWrite) are disabled by default. Re-enable with `CLAUDE_CODE_ENABLE_TODO_TOOLS=1`.
+
 ## Task hierarchy
 
-The Tasks API (v2.1.16+) introduces a four-level structure to break down any complex project in a clear and traceable way.
+The Tasks API (v2.1.16+, default since v2.1.142) introduces a four-level structure to break down any complex project in a clear and traceable way.
 
 | Level | Role |
 |-------|------|
@@ -25,7 +27,7 @@ The Tasks API (v2.1.16+) introduces a four-level structure to break down any com
 | **Task** | Concrete deliverable |
 | **Subtask** | Atomic action |
 
-Tasks survive session endings, context compactions, and restarts — they are stored in `~/.claude/tasks/<id>/`.
+Tasks survive session endings, context compactions, and restarts. They are stored in `~/.claude/tasks/<id>/`.
 
 ## Core tools
 
@@ -59,7 +61,7 @@ claude
 | `pending` | Waiting |
 | `in_progress` | Currently executing |
 | `completed` | Successfully finished |
-| `cancelled` | Cancelled |
+| `failed` | Failed, with error metadata for debugging |
 
 ## Dependencies with blockedBy
 
@@ -80,7 +82,7 @@ Use it as soon as work exceeds three sequential steps, involves multiple directo
 
 ## Cost to anticipate
 
-`TaskList` costs one API call. Fetching each task's details with `TaskGet` adds one additional call per task — for twenty tasks, that's twenty times more overhead. Placing critical information in the `subject` field (visible via `TaskList`) and keeping descriptions concise limits this cost.
+`TaskList` costs one API call. Fetching each task's details with `TaskGet` adds one additional call per task. For twenty tasks, that's twenty times more overhead. Placing critical information in the `subject` field (visible via `TaskList`) and keeping descriptions concise limits this cost.
 
 ## List ID: naming rules
 

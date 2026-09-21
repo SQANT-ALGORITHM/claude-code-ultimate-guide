@@ -4,10 +4,10 @@ subtitle: "The essential complementary tools in the ecosystem"
 card-number: "T22"
 category: "Technical"
 difficulty: "intermediate"
-guide-version: "3.41.0"
+guide-version: "3.42.0"
 author: "Florian BRUNIAUX"
-version: "3.41.0"
-date: "May 2026"
+version: "3.42.0"
+date: "2026-08-28"
 layout: "two-col"
 lang: en
 format:
@@ -16,7 +16,9 @@ format:
 
 ## Cost Tracking
 
-**ccusage** — the community reference tool for tracking API spending. Parses local JSONL files, zero data sent externally.
+The tools in this card are adjacent layers: they observe, configure, or coordinate sessions. They do not replace the runtime that owns the agent loop. Use the [Agent Harness Map](https://cc.bruniaux.com/guide/agent-harness-landscape/) to choose a runtime or orchestrator.
+
+**ccusage**: the community reference tool for tracking API spending. Parses local JSONL files, zero data sent externally.
 
 ```bash
 npx ccusage          # Today's summary
@@ -25,7 +27,7 @@ ccusage blocks --live # Real-time monitoring (5h windows)
 ccusage --breakdown  # Breakdown by model
 ```
 
-**ccburn** — Python alternative with burn-rate charts in the terminal. Useful for visualizing consumption relative to billing limits, within a Python ecosystem.
+**ccburn**: Python alternative with burn-rate charts in the terminal. Useful for visualizing consumption relative to billing limits, within a Python ecosystem.
 
 ```bash
 pip install ccburn
@@ -34,7 +36,7 @@ ccburn
 
 ## Dashboard & Monitoring
 
-**ccboard** — TUI and web interface for monitoring sessions, costs, and statistics in real time.
+**ccboard**: TUI and web interface for monitoring sessions, costs, and statistics in real time.
 
 ```bash
 cargo install ccboard
@@ -42,9 +44,9 @@ ccboard          # TUI interface
 ccboard --web    # Web UI on localhost:3000
 ```
 
-## History Search
+## Social Sharing & Leaderboard
 
-**Straude** — social dashboard to track and share consumption stats. Pushes daily metrics (cost, tokens, models) to a public leaderboard. Note: sends machine hostname and a device UUID to Straude servers. Use `--dry-run` before the first push.
+**Straude**: social dashboard to track and share consumption stats. Pushes daily metrics (cost, tokens, models) to a public leaderboard. Note: sends machine hostname and a device UUID to Straude servers. Use `--dry-run` before the first push.
 
 ```bash
 npx straude@latest   # Auth + sync in one command
@@ -52,9 +54,15 @@ straude push --dry-run  # Preview without sending
 straude status       # Streak, global rank, totals
 ```
 
+**viberank**: leaderboard covering more tools (Claude Code, Codex, Gemini CLI, OpenCode, and more). Sends aggregate totals only, no hostname or device UUID. Publishes its dataset via a free JSON API under CC BY 4.0.
+
+```bash
+npx viberank-cli      # Submit ccusage data
+```
+
 ## Token Optimization
 
-**RTK (Rust Token Killer)** — CLI proxy that filters outputs before they enter the context. 92% reduction on `git log`, 90% on tests. See card T20 for details.
+**RTK (Rust Token Killer)**: CLI proxy that filters outputs before they enter the context. 92% reduction on `git log`, 90% on tests. See card T20 for details.
 
 ```bash
 brew install rtk-ai/tap/rtk
@@ -63,7 +71,7 @@ rtk init             # Setup with automatic hook
 
 ## Parallel Orchestration
 
-**Conductor** — macOS application for orchestrating multiple Claude Code instances in parallel via git worktrees. Integrated interface: diff viewer, CI/GitHub Actions, Linear, PR workflow.
+**Conductor**: macOS application for orchestrating multiple Claude Code instances in parallel via git worktrees. Integrated interface: diff viewer, CI/GitHub Actions, Linear, PR workflow.
 
 Install from conductor.build (macOS only as of March 2026).
 
@@ -78,6 +86,8 @@ Typical flow: create one workspace per feature from a GitHub or Linear issue, le
 | Multi-agents | Conductor or Toad |
 | Python ecosystem | ccburn + Claude Chic |
 
-## Known Gaps (March 2026)
+## Known Gaps
 
-No visual editor for `.claude/skills/` skill files. No unified dashboard combining config, sessions, costs, and MCP. MCP config management remains manual via `~/.claude.json`.
+No visual editor for `.claude/skills/` skill files. No unified dashboard combining config, sessions, costs, and MCP. A dedicated TUI exists for MCP servers (`claude-code-config`, `pip install claude-code-config`), but it stays limited to the `~/.claude.json` scope: no `settings.json`, hooks, or commands.
+
+These projects evolve independently from Claude Code. Check the repository, permissions, and targeted release before installation; the [glossary](https://cc.bruniaux.com/guide/glossary/) distinguishes a runtime, orchestrator, protocol, and adjacent tool.

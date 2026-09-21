@@ -1,14 +1,14 @@
 ---
 title: "Hiérarchie de Configuration"
-subtitle: "Où configurer quoi — de global à local"
+subtitle: "Où configurer quoi, de global à local"
 card-number: "T05"
 category: "Technique"
-guide-version: "3.41.0"
+guide-version: "3.41.3"
 difficulty: "beginner"
 author: "Florian BRUNIAUX"
-version: "3.41.0"
+version: "3.41.3"
 wp-version: "1.1.0"
-date: "Mai 2026"
+date: "2026-08-24"
 layout: "two-col"
 lang: fr
 format:
@@ -40,11 +40,11 @@ sous-dossier/CLAUDE.md       (3 - règles locales)
 
 Les règles du niveau inférieur **complètent** et ne remplacent pas les niveaux supérieurs.
 
-## settings.json — Structure
+## settings.json : Structure
 
 ```json
 {
-  "model": "claude-opus-4-7",
+  "model": "claude-sonnet-5",
   "permissions": {
     "allow": ["Bash(git *)"],
     "deny": ["Bash(rm -rf*)"]
@@ -55,7 +55,7 @@ Les règles du niveau inférieur **complètent** et ne remplacent pas les niveau
 }
 ```
 
-## CLAUDE.md — Bonnes Pratiques
+## CLAUDE.md : Bonnes Pratiques
 
 ```markdown
 # Conventions Projet
@@ -73,13 +73,13 @@ Les règles du niveau inférieur **complètent** et ne remplacent pas les niveau
 
 ## Ce qui Va Où
 
-**Global CLAUDE.md** — Préférences personnelles, style de code, conventions universelles.
+**Global CLAUDE.md** : préférences personnelles, style de code, conventions universelles.
 
-**Projet CLAUDE.md** — Architecture, stack, conventions équipe, commandes de build/test.
+**Projet CLAUDE.md** : architecture, stack, conventions équipe, commandes de build/test.
 
-**settings.json projet** — Permissions d'outils, modèle par défaut, variables d'env de dev.
+**settings.json projet** : permissions d'outils, modèle par défaut, variables d'env de dev.
 
-**settings.local.json** — Overrides perso qui ne doivent pas affecter l'équipe.
+**settings.local.json** : overrides perso qui ne doivent pas affecter l'équipe.
 
 ## .gitignore Obligatoire
 

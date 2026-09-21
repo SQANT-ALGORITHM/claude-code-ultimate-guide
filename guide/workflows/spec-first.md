@@ -6,7 +6,7 @@ tags: [workflow, architecture, config]
 
 # Spec-First Development with Claude
 
-> **Confidence**: Tier 2 — Validated by multiple production teams and aligns with official SDD guidance.
+> **Confidence**: Tier 2, validated by multiple production teams and aligns with official SDD guidance.
 
 Define what you want in CLAUDE.md BEFORE asking Claude to build. One well-structured iteration equals 8 unstructured ones.
 
@@ -57,11 +57,22 @@ The spec becomes the source of truth that:
 - Documents decisions for the team
 - Enables verification of completeness
 
+For larger initiatives, a single spec file can be split further upstream. Anthropic's [AI-native SDLC playbook](https://claude.com/blog/the-ai-native-sdlc-playbook) (2026) names a three-document chain, each gated by a different reviewer before the next document gets written:
+
+```
+intent.md → spec.md → plan.md
+   │            │          │
+ PM gate    Tech gate   Approval before
+(the "why")  (the "what")  code generation (the "how")
+```
+
+`intent.md` states the problem in plain language before any technical framing exists (see "With intent.md" below). `spec.md` is the technical spec this guide already covers in the rest of this section. `plan.md` is the file-by-file implementation plan (ordering, risk, evidence) approved before Claude writes code, distinct from the spec itself.
+
 ---
 
 ## Task Granularity: Sizing Work for Agents
 
-Before writing the spec, verify the task is the right size. Agents work best with **vertical slices** — thin, end-to-end units that cut through all layers but implement exactly one complete user behavior (e.g. "password reset via email", not "authentication system").
+Before writing the spec, verify the task is the right size. Agents work best with **vertical slices**: thin, end-to-end units that cut through all layers but implement exactly one complete user behavior (e.g. "password reset via email", not "authentication system").
 
 **Rule of thumb**: One agent session = one vertical slice. If the task description requires "and" between two user behaviors, split it.
 
@@ -298,6 +309,34 @@ Then implement the rate limiting.
 
 ## Integration with Tools
 
+### With intent.md (Upstream Problem Statement)
+
+Anthropic's [AI-native SDLC playbook](https://claude.com/blog/the-ai-native-sdlc-playbook) (2026) puts one document ahead of the spec: `intent.md` states the problem in natural language, written and gated by the person who owns the problem (usually a PM), before any technical framing exists. Claude only starts drafting `spec.md` once `intent.md` is approved.
+
+```markdown
+# Intent: Reduce checkout abandonment on mobile
+
+## Author
+Jane Doe, Product (jane@company.com)
+
+## Problem
+32% of mobile checkouts are abandoned at the payment step, versus 11% on desktop.
+Support tickets point to the card form timing out on slow connections.
+
+## Constraints
+- Must not change the payment provider (Stripe, contractual)
+- Must ship before the Q3 promo (2026-09-01)
+
+## Open questions
+- Retry silently, or show a "reconnecting" state?
+- Is Apple Pay / Google Pay in scope?
+
+## Gate
+Approved by: [PM name], [date]
+```
+
+The gate is deliberately informal: a PM signs off on the problem statement, not on any implementation detail. Once approved, `spec.md` inherits the constraints and open questions as its starting boundary. `plan.md`, the third document in the chain, is the file-by-file implementation plan (Spec Kit's `/speckit.plan` output, or a standalone file when not using Spec Kit) with its own gate: a technical reviewer approves it before Claude writes any code.
+
 ### With Spec Kit (Greenfield)
 
 ```bash
@@ -444,7 +483,7 @@ When specs exceed ~200 lines, several issues emerge:
 |-----------|--------|
 | **<100 lines** | Single CLAUDE.md is fine |
 | **100-200 lines** | Consider splitting if distinct domains exist |
-| **>200 lines** | **Split immediately** — you're past the cognitive load threshold |
+| **>200 lines** | **Split immediately**: you're past the cognitive load threshold |
 | **Multi-team projects** | Split by domain/ownership regardless of size |
 
 ### Split Strategies
@@ -926,17 +965,17 @@ Claude: Reads CLAUDE.md + @CLAUDE-api.md (relevant context only)
 
 ## SDD vs TDD vs BDD
 
-As of 2026, spec-driven development has productized enough to compare it meaningfully against the older methodologies. The distinction is not which is better in the abstract — it is which artifact governs.
+As of 2026, spec-driven development has productized enough to compare it meaningfully against the older methodologies. The distinction that matters is which artifact governs, not which methodology sounds better in the abstract.
 
 | Methodology | Governing artifact | When it runs | Human role | Regen possible? |
 |-------------|-------------------|--------------|------------|-----------------|
-| TDD | Test suite | After code exists | Write tests first, then code | No — tests document what was built |
-| BDD | Gherkin (.feature files) | After code exists | Write scenarios, then automate | Partial — scenarios can drive codegen |
-| SDD | Spec file (natural language structured) | Before code exists | Write spec, approve contract | Yes — code is a derivable output of the spec |
+| TDD | Test suite | After code exists | Write tests first, then code | No: tests document what was built |
+| BDD | Gherkin (.feature files) | After code exists | Write scenarios, then automate | Partial: scenarios can drive codegen |
+| SDD | Spec file (natural language structured) | Before code exists | Write spec, approve contract | Yes: code is a derivable output of the spec |
 
 The practical implication of the SDD column: if the spec is the governing artifact, then code is in principle regenerable from the spec. Tessl takes this to the logical extreme with files marked `// GENERATED FROM SPEC - DO NOT EDIT`. Martin Fowler notes this is "spec-first" (code starts from spec) but not yet "spec-anchored" (spec and code stay synchronized automatically over time). No tool has solved spec drift reliably at production scale.
 
-Multi-file task failure rate without spec structure: pass@1 drops to 19.4% for multi-file infrastructure tasks versus 87% for isolated functions (Augment Code internal data, no published peer-reviewed study). The directional claim is credible — agents without persistent task context fail more often on tasks that span files and components. The specific numbers are vendor-sourced.
+Multi-file task failure rate without spec structure: pass@1 drops to 19.4% for multi-file infrastructure tasks versus 87% for isolated functions (Augment Code internal data, no published peer-reviewed study). The directional claim is credible: agents without persistent task context fail more often on tasks that span files and components. The specific numbers are vendor-sourced.
 
 ### Factory.ai Missions architecture
 
@@ -944,7 +983,7 @@ The most documented multi-agent SDD implementation in production. Architecture:
 
 1. **Orchestrator** translates requirements into behavioral validation contracts before any implementation begins.
 2. **Workers** implement features in parallel, each receiving a bounded task description from the contract.
-3. **Validator agents** (adversarial, independent) verify each implementation against the contract. They have no context from the workers — only the contract and the output.
+3. **Validator agents** (adversarial, independent) verify each implementation against the contract. They have no context from the workers, only the contract and the output.
 
 On a documented Slack clone project: validators caught 81 problems before any code merged, generating 34% of the total implementation work as "fix features." Median mission duration: 2 hours. The longest documented mission: 16 days. Factory.ai externalizes state in shared artifacts (validation contracts, feature lists, skill definitions) to survive context resets across multi-day missions.
 
@@ -974,7 +1013,7 @@ None of these cover the full governance stack end to end. The gap between "gener
 3. **Is every decision traceable?** Can you reconstruct, after the fact, which agent (and which model version) made a given change, and whether a human approved it? This matters most in regulated environments and matches the audit-trail pattern spec-kitty implements at the OSS scale (above).
 4. **Does the spec stay authoritative after the first generation?** See "Spec drift" immediately below: most platforms solve generation, few solve keeping the spec and the code in sync as the app evolves past its first version.
 
-The commercial products above are closed and managed, so you take their governance on trust. One open source project answers the first three questions in the open: [Liza](https://github.com/liza-mas/liza) (Apache-2.0, 336 stars as of 2026-07-27, single-author) wraps coding-agent CLIs in deterministic Go supervisors that enforce state transitions, role boundaries, merge authority, and TDD gates mechanically rather than by prompt, pairs a doer agent with an adversarial reviewer on every task, records all state on an auditable YAML "blackboard", and ships a circuit breaker that triggers a checkpoint on detected loops or repeated failures, the stop-the-line mechanism of question 2 made explicit. Adoption is tiny and it is not production-proven beyond its author's own use, so treat it as a reference architecture for what mechanical (not prompt-level) governance looks like, not as a dependency to adopt. Its behavioral-contract idea (55+ documented LLM failure modes, each mapped to a countermeasure) is the same "non-overridable rules injected into every agent" pattern that governance-first commercial platforms describe. Full evaluation: [`docs/resource-evaluations/liza-mas-framework.md`](../../docs/resource-evaluations/liza-mas-framework.md).
+The commercial products above are closed and managed, so you take their governance on trust. One open-source project answers the first three questions in inspectable code: [Liza](https://github.com/liza-mas/liza) (Apache-2.0, 363 stars on 2026-08-28) wraps coding-agent CLIs in deterministic Go supervisors that enforce state transitions, role boundaries, leases, reviewer verdicts, merge authority, and recovery. It pairs a doer with an adversarial reviewer, records state on a YAML blackboard, and isolates concurrent tasks in git worktrees. These mechanisms make Liza a reference architecture for mechanical governance, not evidence of production readiness. Worktrees do not sandbox processes, several provider adapters use broad non-interactive permission modes, and the reviewed commit's passing upstream CI does not measure task quality on real tickets. See the [evidence-pinned Liza profile](../ecosystem/agentic-tools.md#48-liza) and the refreshed [`docs/resource-evaluations/liza-mas-framework.md`](../../docs/resource-evaluations/liza-mas-framework.md).
 
 #### The consultancy-backed factory: a second cohort
 
@@ -1021,9 +1060,9 @@ No tool has a reliable, widely-adopted mechanism for automated spec-code synchro
 ## See Also
 
 - [workflows/agentic-software-factories.md](./agentic-software-factories.md): orientation map covering the full spectrum from a single session to a closed platform, plus the decision tree for when a closed factory actually beats the native stack
-- [../core/methodologies.md](../core/methodologies.md) — SDD and other methodologies
+- [../core/methodologies.md](../core/methodologies.md): SDD and other methodologies
 - [Spec Kit Documentation](https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/)
 - [OpenSpec Documentation](https://github.com/Fission-AI/OpenSpec)
-- [tdd-with-claude.md](./tdd-with-claude.md) — Combine with TDD
-- [Spec-to-Code Factory](https://github.com/SylvainChabaud/spec-to-code-factory) — Implémentation référence complète avec enforcement outillé (6 gates via Node.js, invariants "No Spec No Code" + "No Task No Commit", ~900K tokens/projet)
+- [tdd-with-claude.md](./tdd-with-claude.md): Combine with TDD
+- [Spec-to-Code Factory](https://github.com/SylvainChabaud/spec-to-code-factory): Implémentation référence complète avec enforcement outillé (6 gates via Node.js, invariants "No Spec No Code" + "No Task No Commit", ~900K tokens/projet)
 - [Superpowers](https://github.com/obra/superpowers): plugin suite (262K stars as of 2026-07-27, was 95k+) with a `brainstorming` skill that enforces spec-first as a mandatory gate: the agent refuses to write code until a spec has been reviewed and approved. Install: `/plugin install superpowers@claude-plugins-official`.

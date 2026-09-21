@@ -28,6 +28,8 @@ Orchestrate multi-agent workflows. Build complex automation that coordinates mul
 
 A **multi-agent system** is when multiple specialized agents work together on one goal.
 
+Before choosing a team pattern, separate the layers: the model produces tokens, a runtime harness owns a session's model-and-tool loop, the repository harness supplies instructions and verification, and an orchestrator coordinates sessions. [Agent Harness Engineering](../core/agent-harness.md) explains that model; the [Agent Harness Map](../ecosystem/agent-harness-landscape.md) compares loop-owning runtimes and keeps the broader directory separate. Use [Agent Tools: Beyond Claude Code](../ecosystem/agentic-tools.md) for frameworks and control planes, the [glossary](../core/glossary.md) for terms, [Agent Evaluation](../roles/agent-evaluation.md) to score the result, [Session Observability](../ops/observability.md) to inspect execution, and [Security Hardening](../security/security-hardening.md) before running work unattended.
+
 ### Example: Code Release Workflow
 
 Instead of one Claude handling everything:
@@ -580,6 +582,6 @@ You've completed the 7-module learning path! You now understand:
 
 ---
 
-**Completed Module 07?** → You're a Claude Code power user! 🚀
+**Completed Module 07?** → You're a Claude Code power user.
 
 Explore the full guide at `guide/ultimate-guide.md` for depth, or teach others what you've learned.

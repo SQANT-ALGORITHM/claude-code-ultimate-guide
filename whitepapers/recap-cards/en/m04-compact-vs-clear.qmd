@@ -4,10 +4,10 @@ subtitle: "When to summarize and when to reset the context"
 card-number: "M04"
 category: "Methodology"
 difficulty: "beginner"
-guide-version: "3.41.0"
+guide-version: "3.41.3"
 author: "Florian BRUNIAUX"
-version: "3.41.0"
-date: "May 2026"
+version: "3.41.3"
+date: "August 2026"
 layout: "two-col"
 lang: en
 format:
@@ -23,7 +23,7 @@ format:
 | Context freed | ~40-50% | 100% |
 | When to use | Mid-task | Topic change |
 
-The fundamental distinction: `/compact` compresses without cutting the thread, `/clear` starts from scratch. Neither is universally better, the choice depends on the situation.
+`/compact` compresses without cutting the thread, `/clear` starts from scratch. Neither is universally better, the choice depends on the situation.
 
 ## Context Zones
 
@@ -35,7 +35,7 @@ The fundamental distinction: `/compact` compresses without cutting the thread, `
         or /compact as a last resort
 ```
 
-The classic mistake: waiting until 90% to run `/compact`. At that point, Claude starts forgetting instructions and response quality drops. 75% is the right threshold.
+Waiting until 90% to run `/compact` is the classic mistake. At that point, Claude starts forgetting instructions and response quality drops. 75% is the right threshold.
 
 ## When to Use `/compact`
 

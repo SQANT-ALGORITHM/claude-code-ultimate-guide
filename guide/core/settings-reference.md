@@ -6,7 +6,7 @@
 
 **Legend:**
 - No badge = confirmed in official documentation
-- `📋 Schema only` = present in JSON schema but not on official settings page — still valid
+- `📋 Schema only` = present in JSON schema but not on official settings page (still valid)
 - `⚠️ Unverified` = not confirmed in official sources
 
 ---
@@ -23,7 +23,7 @@ Claude Code uses four settings scopes, applied from highest to lowest priority:
 | 4 | **Project** | `.claude/settings.json` | Yes (committed) | Team-shared settings |
 | 5 | **User** | `~/.claude/settings.json` | No | Global personal defaults |
 
-**Array merging:** Settings like `permissions.allow`, `sandbox.filesystem.allowWrite`, and `allowedHttpHookUrls` are concatenated and deduplicated across scopes — not replaced.
+**Array merging:** Settings like `permissions.allow`, `sandbox.filesystem.allowWrite`, and `allowedHttpHookUrls` are concatenated and deduplicated across scopes, not replaced.
 
 **Deny precedence:** `permissions.deny` rules always take effect regardless of allow/ask rules at any scope.
 
@@ -34,7 +34,7 @@ Claude Code uses four settings scopes, applied from highest to lowest priority:
 - File: `managed-settings.json` at `/Library/Application Support/ClaudeCode/` (macOS), `/etc/claude-code/` (Linux/WSL), `C:\Program Files\ClaudeCode\` (Windows)
 - Drop-in directory: `managed-settings.d/*.json` alongside `managed-settings.json`, merged alphabetically
 
-**Other config:** `~/.claude.json` stores OAuth session, MCP server configs, per-project trust state, and preferences like `editorMode`. Do not put `~/.claude.json` keys into `settings.json` — it will trigger schema validation errors.
+**Other config:** `~/.claude.json` stores OAuth session, MCP server configs, per-project trust state, and preferences like `editorMode`. Do not put `~/.claude.json` keys into `settings.json`: it will trigger schema validation errors.
 
 ---
 
@@ -89,7 +89,7 @@ Claude's preferred response language. Also sets the voice dictation language. Ex
 **Scope:** all
 **Default:** `30`
 
-Sessions inactive longer than this number of days are deleted at startup. Setting to `0` deletes all existing transcripts at startup and disables session persistence entirely — no `.jsonl` files are written, `/resume` shows no conversations, and hooks receive an empty `transcript_path`.
+Sessions inactive longer than this number of days are deleted at startup. Setting to `0` deletes all existing transcripts at startup and disables session persistence entirely: no `.jsonl` files are written, `/resume` shows no conversations, and hooks receive an empty `transcript_path`.
 
 #### `autoUpdatesChannel`
 **Type:** string
@@ -279,7 +279,7 @@ Permission rules requiring user confirmation before tool use.
 **Scope:** all
 **Default:** `[]`
 
-Permission rules blocking tool use. Highest safety precedence — cannot be overridden by allow/ask rules at any scope.
+Permission rules blocking tool use. Highest safety precedence, cannot be overridden by allow/ask rules at any scope.
 
 #### `permissions.additionalDirectories`
 **Type:** array of strings
@@ -457,7 +457,7 @@ When `true`, only `allowedMcpServers` from managed settings are respected. Users
 **Scope:** managed only
 **Default:** `false`
 
-Allow channels for Team and Enterprise users. When unset or `false`, channel message delivery is blocked regardless of what users pass to `--channels`.
+Allow channels for claude.ai Team and Enterprise users. When unset or `false`, channel message delivery is blocked regardless of what users pass to `--channels`. Console API-key deployments use Console defaults and managed controls instead; do not infer their policy from this Team/Enterprise-only setting.
 
 #### `allowedChannelPlugins`
 **Type:** array
@@ -465,6 +465,8 @@ Allow channels for Team and Enterprise users. When unset or `false`, channel mes
 **Default:** none (uses default Anthropic allowlist)
 
 Allowlist of channel plugins that may push messages. Replaces the default Anthropic allowlist when set. Requires `channelsEnabled: true`. Empty array blocks all channel plugins.
+
+> **Security boundary**: this allowlist controls which Channel plugins may deliver messages. It does not grant a delivered message, its sender, or the plugin any Bash, filesystem, GitHub, or other tool permission. Gate senders and treat Channel content as untrusted input, including when a plugin can relay a permission prompt.
 
 ---
 
@@ -541,14 +543,14 @@ Enable a weaker sandbox for unprivileged Docker environments (Linux and WSL2 onl
 **Scope:** all
 **Default:** `[]`
 
-Specific Unix socket paths accessible in the sandbox (for SSH agents, Docker, etc.).
+Specific Unix socket paths accessible in the sandbox on macOS (for SSH agents, local databases, etc.). Ignored on Linux and WSL2, where the seccomp filter cannot inspect socket paths; use `allowAllUnixSockets` only after accepting its broader boundary. The [cross-session inbox case](../security/sandbox-native.md#cross-session-inbox-sockets) does not require this exception for normal `SendMessage` calls.
 
 #### `sandbox.network.allowAllUnixSockets`
 **Type:** boolean
 **Scope:** all
 **Default:** `false`
 
-Allow all Unix socket connections in the sandbox. Overrides `allowUnixSockets`.
+Allow all Unix socket connections in the sandbox. Overrides `allowUnixSockets`. On Linux and WSL2, this is the only way to permit Unix sockets because it skips the seccomp filter that otherwise blocks `socket(AF_UNIX, ...)` calls.
 
 #### `sandbox.network.allowLocalBinding`
 **Type:** boolean
@@ -646,7 +648,7 @@ Project settings cannot set it, so a checked-out repository cannot switch filesy
 
 Credential files to hide from sandboxed commands. `mode` accepts only `"deny"`, which blocks reads the same way `filesystem.denyRead` does.
 
-This matters more than its placement suggests. The sandbox's default read policy covers the **entire machine**, and there is no built-in credential denylist, so `~/.ssh` and `~/.aws/credentials` are readable by every sandboxed command until you list them. Paths follow the same prefix rules as `sandbox.filesystem.*`, and `deny` entries merge across every scope: any scope can add one, no scope can remove one another scope added.
+The sandbox's default read policy covers the **entire machine**, and there is no built-in credential denylist, so `~/.ssh` and `~/.aws/credentials` are readable by every sandboxed command until you list them. Paths follow the same prefix rules as `sandbox.filesystem.*`, and `deny` entries merge across every scope: any scope can add one, no scope can remove one another scope added.
 
 ```json
 {
@@ -741,16 +743,19 @@ When `true`, only `allowRead` paths from managed settings are respected. `allowR
     },
     "network": {
       "allowedDomains": ["github.com", "*.npmjs.org"],
-      "allowUnixSockets": ["/var/run/docker.sock"],
       "allowLocalBinding": true
     }
   }
 }
 ```
 
+Unix-socket exceptions are intentionally absent from this baseline. Granting `/var/run/docker.sock` would give sandboxed code control of the Docker daemon and an effective path to the host.
+
 ---
 
 ### Plugins and Marketplaces
+
+For marketplace publication and the `<claude-code-hint />` recommendation boundary, see [Plugin Distribution and Recommendation Hints](../ecosystem/plugin-distribution.md). The settings below govern local and managed marketplace controls.
 
 #### `enabledPlugins`
 **Type:** object
@@ -900,11 +905,11 @@ Configure a custom script for `@` file path autocomplete. The command receives J
 Controls how Claude communicates throughout the session. Equivalent to selecting a style via `/config` → "Preferred output style".
 
 **Built-in values:**
-- `"Default"` — concise, task-focused responses optimized for speed
-- `"Explanatory"` — adds reasoning blocks explaining design choices, trade-offs, and codebase patterns
-- `"Learning"` — pauses at key steps, inserts `TODO(human)` markers, asks you to write the meaningful pieces (pair-programming mode)
+- `"Default"`: concise, task-focused responses optimized for speed
+- `"Explanatory"`: adds reasoning blocks explaining design choices, trade-offs, and codebase patterns
+- `"Learning"`: pauses at key steps, inserts `TODO(human)` markers, asks you to write the meaningful pieces (pair-programming mode)
 
-**Custom styles:** reference any filename (without `.md`) from `.claude/styles/`.
+**Custom styles:** reference any filename (without `.md`) from `.claude/output-styles/` for a project or `~/.claude/output-styles/` for a user-wide style. Custom styles omit the built-in Claude Code software engineering instructions unless their YAML frontmatter sets `keep-coding-instructions: true`. Changes take effect after `/clear` or a new session.
 
 ```json
 { "outputStyle": "Explanatory" }
@@ -1021,7 +1026,7 @@ Attribution text added to pull request descriptions. Set to empty string to disa
 **Type:** boolean
 **Scope:** all
 **Default:** `true`
-**Status:** DEPRECATED — use `attribution` instead
+**Status:** DEPRECATED, use `attribution` instead
 
 Whether to include the `Co-Authored-By` byline. Superseded by the `attribution` object.
 
@@ -1050,7 +1055,7 @@ Directories to symlink from the main repository into each worktree, avoiding lar
 **Scope:** all
 **Default:** `[]`
 
-Directories to check out in each worktree via git sparse-checkout (cone mode). Only listed paths are written to disk — useful for large monorepos.
+Directories to check out in each worktree via git sparse-checkout (cone mode). Only listed paths are written to disk, useful for large monorepos.
 
 ```json
 {
@@ -1550,8 +1555,7 @@ These appear in community sources or older documentation but are not confirmed i
       "denyRead": ["~/.aws/credentials"]
     },
     "network": {
-      "allowedDomains": ["github.com", "*.npmjs.org"],
-      "allowUnixSockets": ["/var/run/docker.sock"]
+      "allowedDomains": ["github.com", "*.npmjs.org"]
     }
   },
 

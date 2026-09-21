@@ -95,8 +95,8 @@ update_readme_date() {
     # Update badge date pattern: Updated-XXX-brightgreen
     sed -i '' "s|Updated-[^-]*-brightgreen|Updated-${badge_date}_·_v${VERSION}-brightgreen|g" "$file"
 
-    # Update footer date pattern: Updated daily · DATE (preserve space before |)
-    sed -i '' "s|Updated daily · [^|]*|Updated daily · ${current_date} |g" "$file"
+    # Update footer date pattern and preserve the closing Markdown asterisk.
+    sed -i '' "s|Updated daily · [^*]*|Updated daily · ${current_date}|g" "$file"
 
     echo "✅ $file: date updated (→ $current_date)"
   fi
@@ -110,6 +110,17 @@ check_file "machine-readable/reference.yaml"
 
 # Update README date (version and date in badge + footer)
 update_readme_date
+
+# Keep translation provenance truthful. A declared stale translation is valid
+# in the default gate; missing pairs, wrong hashes, and contradictory status are not.
+if $CHECK_ONLY; then
+  if ! python3 scripts/check-translations.py --check; then
+    ERRORS=$((ERRORS + 1))
+  fi
+else
+  python3 scripts/check-translations.py --update-local
+  python3 scripts/check-translations.py --check
+fi
 
 echo ""
 

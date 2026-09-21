@@ -63,7 +63,7 @@ Comment `@claude review this PR` on any PR → Claude reads the diff and posts a
 | **Interactive** | `@claude` mention in PR/issue comment | On-demand reviews, questions, fixes |
 | **Automated** | Push, PR open, schedule, label | Continuous quality gates, triage |
 
-Both use the same action — the difference is the `on:` block and whether you include an `if:` condition.
+Both use the same action: the difference is the `on:` block and whether you include an `if:` condition.
 
 ---
 
@@ -119,9 +119,9 @@ jobs:
 ```
 
 **Usage examples:**
-- `@claude review this PR` — full diff analysis with suggestions
-- `@claude is this change backwards compatible?` — targeted question
-- `@claude fix the failing test in src/auth.test.ts` — Claude opens a follow-up PR with the fix
+- `@claude review this PR`: full diff analysis with suggestions
+- `@claude is this change backwards compatible?`: targeted question
+- `@claude fix the failing test in src/auth.test.ts`: Claude opens a follow-up PR with the fix
 
 ---
 
@@ -256,7 +256,7 @@ jobs:
 
 ## Pattern 5: Scheduled Repo Maintenance
 
-Weekly health check — runs without any human trigger.
+Weekly health check: runs without any human trigger.
 
 ```yaml
 # .github/workflows/claude-maintenance.yml
@@ -319,13 +319,13 @@ The examples above use `ANTHROPIC_API_KEY` directly. For teams using cloud provi
     ANTHROPIC_MODEL: 'claude-3-5-sonnet-v2@20241022'
 ```
 
-Cloud providers benefit from data residency compliance and can leverage existing IAM policies instead of managing a separate API key.
+Cloud providers benefit from data residency compliance and can use existing IAM policies instead of managing a separate API key.
 
 ---
 
 ## Cost Control
 
-Automated workflows run without a human in the loop — set explicit limits.
+Automated workflows run without a human in the loop: set explicit limits.
 
 ```yaml
 - uses: anthropics/claude-code-action@v1
@@ -369,10 +369,10 @@ jobs:
 Before deploying to a team repo:
 
 - [ ] `ANTHROPIC_API_KEY` stored as a GitHub secret, never in workflow YAML
-- [ ] Workflow permissions are minimal — use `contents: read` unless writes are required
+- [ ] Workflow permissions are minimal: use `contents: read` unless writes are required
 - [ ] For public repos: add `if: github.event.pull_request.head.repo.full_name == github.repository` to prevent fork PRs from triggering API calls
-- [ ] Review what the workflow posts publicly — Claude's comments are visible to all contributors
-- [ ] Use `pull_request_target` with caution — it runs with write permissions even from forks
+- [ ] Review what the workflow posts publicly: Claude's comments are visible to all contributors
+- [ ] Use `pull_request_target` with caution: it runs with write permissions even from forks
 
 **Fork safety pattern (public repos):**
 ```yaml
@@ -386,8 +386,10 @@ jobs:
 
 ## See Also
 
-- [Section 9.3 CI/CD Integration](#93-cicd-integration) — headless mode, Unix piping, `--output-format json`
-- [Production Safety](../security/production-safety.md) — guardrails for automated agents
-- [Security Hardening](../security/security-hardening.md) — MCP and webhook security
-- [Official action docs](https://github.com/anthropics/claude-code-action) — solutions guide, migration, cloud providers
-- [Community workflow blueprint](https://github.com/alirezarezvani/claude-code-github-workflow) — 8 workflows + 4 autonomous agents for advanced teams
+- [Monitor, Channels and Safe Delegation to Codex](./monitor-event-delegation.md): secure split-job Codex pattern and why a hosted runner is separate from a local Monitor
+
+- [Section 9.3 CI/CD Integration](#93-cicd-integration): headless mode, Unix piping, `--output-format json`
+- [Production Safety](../security/production-safety.md): guardrails for automated agents
+- [Security Hardening](../security/security-hardening.md): MCP and webhook security
+- [Official action docs](https://github.com/anthropics/claude-code-action): solutions guide, migration, cloud providers
+- [Community workflow blueprint](https://github.com/alirezarezvani/claude-code-github-workflow): 8 workflows + 4 autonomous agents for advanced teams

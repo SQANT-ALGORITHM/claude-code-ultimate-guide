@@ -11,6 +11,63 @@ Suivi des versions des ebooks, indépendamment de la version du guide.
 
 ---
 
+## [2026-08-30] DORA 2026 et corpus Pavan Belagatti
+
+### Fixed
+
+- **WP11 FR/EN**: version 1.3.0 à 1.3.1. Le modèle historique à quatre métriques et MTTR est remplacé par les cinq métriques DORA actuelles: Change Lead Time, Deployment Frequency, Failed Deployment Recovery Time, Change Fail Rate et Deployment Rework Rate. Les anciennes tables Elite, High, Medium et Low sont retirées comme cibles courantes, les chiffres internes d'Anthropic sont bornés à leur environnement, et le protocole relie désormais déploiements, incidents et rework.
+- **WP12 FR/EN**: version 1.4.0 à 1.4.1. La recommandation Engineering Manager cite les cinq métriques DORA actuelles; la version anglaise est alignée pour conserver une version bilingue commune.
+
+## [2026-08-30] Loop, graph, harness, orchestrator: publications dérivées
+
+### Added
+
+- **WP12 FR/EN**: version 1.3.0 à 1.4.0. Une synthèse explicite distingue boucle, graphe, harness et orchestrateur, remplace la hiérarchie de couches par la plus petite structure de contrôle qui résout le besoin en sécurité, précise le sens opérationnel de `unknown`, et renvoie vers la nouvelle page `Loop & Graph Engineering` (`https://cc.bruniaux.com/guide/loop-graph-engineering/`).
+- **Fiche WP12 FR**: la synthèse remplace le point générique sur le harness par la taxonomie loop/graph/harness/orchestrator et la consigne de qualifier les mécanismes observés avant le pilote.
+- **C14 FR/EN Agent Harness Map**: la carte une page précise que boucle et graphe sont des vues, pas des couches supplémentaires, ajoute l'étape de flux versionné, rappelle les quatre statuts appliqués aux mécanismes observés, et renvoie vers la nouvelle page `Loop & Graph Engineering`.
+- **Cheatsheets FR/EN**: la carte rapide des quatre couches ajoute la frontière boucle/graphe, réserve `confirmed`/`claimed`/`unknown` aux mécanismes observés, et renvoie vers la nouvelle page `Loop & Graph Engineering`.
+
+## [2026-08-28] Agent Harness Map, publications dérivées
+
+### Added
+
+- **WP12 FR/EN**: version 1.1.1 à 1.3.0. La sélection distingue runtime, contrat de dépôt, orchestrateur et boucle externe d'optimisation. Le whitepaper remplace l'affirmation universelle sur la primauté du harness par le couple modèle-harness, ajoute les résultats contrôlés de *The Scaffold Effect*, et documente Meta-Harness, Agentic Harness Engineering et HarnessOpt-Bench avec leurs limites expérimentales.
+- **WP04 FR/EN**: version 1.4.1 à 1.5.0. Les responsabilités des quatre couches sont ajoutées.
+- **WP08 FR/EN**: version 1.5.1 à 1.6.0. La frontière entre runtime et orchestrateur est ajoutée.
+- **WP11 FR/EN**: version 1.2.1 à 1.3.0. Le protocole d'essai et ses métriques sont ajoutés.
+- **WP07 FR/EN**: version 1.4.3 à 1.4.4. Les références canoniques portables sont ajoutées sans transformer le catalogue étendu en classement de runtimes.
+- **C14 FR/EN Agent Harness Map**: fiche parallèle sur les quatre couches, les cinq surfaces de preuve, le couple modèle-harness et la position externe des optimiseurs.
+- **Cheatsheets FR/EN et guide cheatsheet**: table compacte des quatre couches, couple modèle-harness, optimiseur externe et liens canoniques vers Agent Harness Map, Agent Harness Engineering, Agent Tools et le glossaire.
+
+### Changed
+
+- **C12 FR/EN**: claims larges sur les intégrations IDE, le SDK et MCP remplacés par des surfaces à vérifier; les volumes d'installation non sourcés sont retirés.
+- **M16 FR/EN**: seuils de taille, de contexte, de budget et de nombre d'agents non justifiés remplacés par des critères observables de décomposition, coût, récupération et revue indépendante.
+- **T22 FR/EN**: les outils tiers sont décrits comme des couches adjacentes, pas comme des runtimes.
+- **Catalogues de publication**: série corrigée à 13 whitepapers et 58 fiches par langue. Les PDF C14 FR/EN ont été rendus en A4 sur une page et portent le total à 58 PDF par langue dans le lot de publication. Les frontmatters C12, C14 et T22 utilisent désormais la date ISO `2026-08-28`, ce qui empêche Typst de rabattre les pieds de page localisés sur une date incorrecte.
+
+## [2026-08-24] Audit de style anti-IA, 13 whitepapers + 57 fiches récap, PDF régénérés et déployés
+
+Passage systématique des 13 whitepapers et des 57 fiches récap (FR+EN, 70 documents bilingues) contre la checklist `~/.claude/ANTI_AI.md` (em dash, ouvertures stéréotypées, deux-points rhétoriques d'annonce, chutes sentencieuses, emoji décoratifs, personas inventées, buzzwords creux), via 70 agents en parallèle (1 par document bilingue), suivi d'une passe de vérification. 59 documents sur 70 étaient déjà conformes. 11 ont reçu des corrections réelles, la plus importante étant WP07 (51 corrections, essentiellement des tirets `---` faisant office d'em dash). Deux points laissés en l'état par choix éditorial délibéré, à trancher séparément : les personas récurrentes (Antoine, Léa, Karim, Sophie, Marc, Thomas, Julien) utilisées dans les encadrés de mise en situation à travers toute la série, et le marqueur de navigation `📖 Pour aller plus loin / Further reading` répété à l'identique sur les 13 whitepapers. Les 10 whitepapers et la fiche récap M03 modifiés ont vu leurs PDF (et EPUB pour les whitepapers) régénérés et redéployés sur `florian-portfolio/public/guides/`, avec mise à jour de `guides.mjs`, `whitepapers-data.ts` et `recap-cards-data.ts` (landing), plus régénération du ZIP série méthodologie (FR+EN).
+
+### Fixed
+- **WP07 Guide de Référence** : 51 corrections (24 FR + 27 EN), essentiellement des tirets `---` en em dash et des emoji décoratifs hors tableau.
+- **WP11 Team Metrics** : 20 corrections (10 FR + 10 EN), deux-points rhétoriques d'annonce réécrits en phrases directes.
+- **WP00, WP01, WP02, WP04, WP05, WP06, WP08, WP09** : corrections ponctuelles (emoji décoratifs, personas isolées, buzzwords, chutes sentencieuses), 4 à 10 par whitepaper.
+- **Fiche récap M03 Sessions Continuité** : chute sentencieuse type maxime réécrite en phrase factuelle (FR+EN).
+
+---
+
+## [2026-08-24] Audit de contenu complet, 13 whitepapers + 57 fiches récap, PDF régénérés et déployés
+
+Premier audit de contenu (pas seulement de fraîcheur des métadonnées) mené sur l'ensemble de la série depuis sa création : chaque whitepaper et chaque fiche récap comparés phrase par phrase au guide actuel et au `CHANGELOG.md` racine, via deux passages d'agents en parallèle (13 pour les whitepapers, 12 lots de 5 fiches pour les fiches récap). 116 problèmes trouvés sur les whitepapers (35 critiques), dont plusieurs répétés à l'identique sur les fiches récap qui en dérivent : Claude Opus 4.8 présenté comme modèle par défaut (remplacé par Opus 5 depuis v2.1.219), profondeur de nesting des sub-agents à 5 niveaux (actuellement 3), outil `MultiEdit` inventé, `TodoWrite` présenté sans la mention de désactivation par défaut depuis v2.1.233, `--safe-mode` mal décrit, champ `agent:` inventé dans les frontmatters SKILL.md, chemins de fichiers cassés (`guide/security-hardening.md`, `guide/data-privacy.md`, etc.), et pour 03-securite, l'omission du gap de sécurité le plus grave documenté dans le guide (`permissions.deny` sur Read n'atteint jamais un sous-processus Bash). Détail complet : `claudedocs/whitepaper-content-audit-2026-08-24.md` et `claudedocs/recap-card-content-audit-2026-08-24.md` (non versionnés, working docs). Toutes les corrections appliquées, `wp-version` bumpé en patch sur les 13 whitepapers, `guide-version`/`version` synchronisés à 3.41.3 sur les 57 fiches récap. Les 26 PDF whitepapers et les 114 PDF de fiches récap (+ 6 ZIP par série T/M/C × FR/EN) ont été régénérés et déployés sur `florian-portfolio/public/guides/`, avec mise à jour de `guides.mjs` (liens email) et `whitepapers-data.ts`/`recap-cards-data.ts` (landing).
+
+### Fixed
+- **13 whitepapers FR+EN** : voir `CHANGELOG.md` racine, entrées "recap cards" et "whitepapers" du 2026-08-24 pour le détail par WP.
+- **57 fiches récap FR+EN** : voir `CHANGELOG.md` racine, entrées "Recap cards" du 2026-08-24 pour le détail par lot.
+
+---
+
 ## [2026-08-20] Cheatsheet v1.1.2: /ultraplan removed, /simplify description corrected
 
 `/ultraplan` was removed from Claude Code in v2.1.222 (2026-08-04). The FR and EN cheatsheets still listed it as a research-preview command five months of releases later, discovered while syncing the release tracker to v2.1.237. `/simplify`'s description was also stale: it described general over-engineering detection with auto-fix, the behavior before v2.1.154 reworked it into a cleanup-only review (reuse, simplification, efficiency) that no longer hunts bugs.

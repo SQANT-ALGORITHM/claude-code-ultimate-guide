@@ -4,10 +4,10 @@ subtitle: "The optimal routine for a productive development session"
 card-number: "M01"
 category: "Methodology"
 difficulty: "beginner"
-guide-version: "3.41.0"
+guide-version: "3.41.3"
 author: "Florian BRUNIAUX"
-version: "3.41.0"
-date: "May 2026"
+version: "3.41.3"
+date: "August 2026"
 layout: "two-col"
 lang: en
 format:
@@ -28,25 +28,25 @@ Every Claude Code session follows this pattern:
 7. COMMIT    → Save (optional)
 ```
 
-The key: **Claude proposes, you decide.** Never skip the review step, even on changes that seem obvious.
+**Claude proposes, you decide.** Never skip the review step, even on changes that seem obvious.
 
 ## Session Start
 
 **Before typing the first request:**
 
-1. Verify CLAUDE.md is loaded (first line shown in context)
+1. Verify CLAUDE.md is loaded: ask "What's the test command for this project?" and see if Claude answers with the configured command
 2. Set a clear intention: one single objective per session
 3. Start with `/plan` if the task touches multiple files
 
 ```bash
 cd your-project
 claude
-# Check: "✓ CLAUDE.md loaded"
+# Check with /status or a question about the project config
 ```
 
 ## During the Session
 
-**Review the diff at each step** — do not let Claude chain multiple changes without intermediate validation. On significant modifications, ask explicitly:
+**Review the diff at each step**: do not let Claude chain multiple changes without intermediate validation. On significant modifications, ask explicitly:
 
 ```
 You: Show me what you changed before continuing

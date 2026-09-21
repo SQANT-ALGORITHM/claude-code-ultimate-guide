@@ -4,19 +4,21 @@ subtitle: "Organiser le travail de Claude avec la Tasks API"
 card-number: "M06"
 category: "Méthodologie"
 difficulty: "intermediate"
-guide-version: "3.41.0"
+guide-version: "3.41.3"
 author: "Florian BRUNIAUX"
-version: "3.41.0"
-date: "Mai 2026"
+version: "3.41.3"
+date: "Août 2026"
 layout: "two-col"
 lang: fr
 format:
   recap-card-typst: default
 ---
 
+> **v2.1.233** : sur Opus 4.8, Sonnet 5, Fable 5, Mythos 5 et modèles plus récents, la Tasks API (et TodoWrite) sont désactivés par défaut. Réactiver avec `CLAUDE_CODE_ENABLE_TODO_TOOLS=1`.
+
 ## Hiérarchie des tâches
 
-La Tasks API (v2.1.16+) introduit une structure en quatre niveaux pour décomposer n'importe quel projet complexe de façon claire et traçable.
+La Tasks API (v2.1.16+, activée par défaut depuis v2.1.142) introduit une structure en quatre niveaux pour décomposer n'importe quel projet complexe de façon claire et traçable.
 
 | Niveau | Rôle |
 |--------|------|
@@ -25,7 +27,7 @@ La Tasks API (v2.1.16+) introduit une structure en quatre niveaux pour décompos
 | **Task** | Livrable concret |
 | **Subtask** | Action atomique |
 
-Les tâches survivent aux fins de session, aux compactions de contexte, et aux redémarrages — elles sont stockées dans `~/.claude/tasks/<id>/`.
+Les tâches survivent aux fins de session, aux compactions de contexte, et aux redémarrages : elles sont stockées dans `~/.claude/tasks/<id>/`.
 
 ## Outils principaux
 
@@ -59,7 +61,7 @@ claude
 | `pending` | En attente |
 | `in_progress` | En cours d'exécution |
 | `completed` | Terminée avec succès |
-| `cancelled` | Annulée |
+| `failed` | Échouée, avec métadonnées d'erreur pour le debug |
 
 ## Dépendances avec blockedBy
 
@@ -80,7 +82,7 @@ Utiliser dès que le travail dépasse trois étapes séquentielles, implique plu
 
 ## Coût à anticiper
 
-`TaskList` coûte un appel API. Récupérer les détails de chaque tâche avec `TaskGet` ajoute un appel supplémentaire par tâche — pour vingt tâches, cela représente vingt fois plus d'overhead. Placer les informations critiques dans le champ `subject` (visible via `TaskList`) et garder les descriptions concises limite ce coût.
+`TaskList` coûte un appel API. Récupérer les détails de chaque tâche avec `TaskGet` ajoute un appel supplémentaire par tâche. Pour vingt tâches, cela représente vingt fois plus d'overhead. Placer les informations critiques dans le champ `subject` (visible via `TaskList`) et garder les descriptions concises limite ce coût.
 
 ## ID de liste : règles de nommage
 

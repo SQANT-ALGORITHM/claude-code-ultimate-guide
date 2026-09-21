@@ -32,7 +32,7 @@ The rise of AI coding assistants has created a new challenge: **knowing which co
 
 ### AI Code Halflife
 
-Research on git-ai tracked repositories reveals a striking metric: the **AI Code Halflife** is approximately **3.33 years** (median). This means half of AI-generated code gets replaced within 3.33 years—faster than typical code churn.
+Research on git-ai tracked repositories reveals a striking metric: the **AI Code Halflife** is approximately **3.33 years** (median). This means half of AI-generated code gets replaced within 3.33 years, faster than typical code churn.
 
 Why? AI code often:
 - Lacks deep understanding of project architecture
@@ -273,7 +273,7 @@ Reviewed-by: Human Developer <human@llvm.org>
 
 > More than trivial autocomplete or spelling correction. If AI influenced the structure, logic, or significant content, disclose it.
 
-**Scope:** All contributions—code, docs, translations, artwork.
+**Scope:** All contributions: code, docs, translations, artwork.
 
 ### 4.4 Policy Comparison Matrix
 
@@ -466,7 +466,7 @@ entire approve --approver="jane@company.com"
 
 **Architecture:**
 
-Entire stores checkpoints on an orphan branch — no common ancestor with `main`, so no merge conflicts and no history pollution:
+Entire stores checkpoints on an orphan branch, with no common ancestor with `main`, so no merge conflicts and no history pollution:
 
 ```
 entire/checkpoints/v1/              ← orphan branch (no common ancestor with main)
@@ -661,7 +661,7 @@ git-ai can store this metadata.
 
 **Minimum viable attribution in 2 minutes:**
 
-1. **Already using Claude Code?** You're done—`Co-Authored-By` is automatic.
+1. **Already using Claude Code?** You're done: `Co-Authored-By` is automatic.
 
 2. **Want more granularity?** Add to your commit template:
 
@@ -750,7 +750,7 @@ When SOC2, ISO27001, or HIPAA auditors ask for evidence of AI code governance, h
 
 **Practical tip**: Run `./scripts/claude-governance-audit.sh` (see [enterprise-governance.md §5.3](../security/enterprise-governance.md#53-compliance-checking)) before each audit to verify controls are in place and generate a baseline report.
 
-**For session-level audit trails** with full context (prompts, reasoning, tool calls, diffs), Entire CLI creates cryptographically-linked checkpoints in Git. This is one approach among several — evaluate based on your retention requirements and team size. See [§5.1 Entire CLI](#51-entire-cli) for setup and evaluation criteria.
+**For session-level audit trails** with full context (prompts, reasoning, tool calls, diffs), Entire CLI creates cryptographically-linked checkpoints in Git. This is one approach among several: evaluate based on your retention requirements and team size. See [§5.1 Entire CLI](#51-entire-cli) for setup and evaluation criteria.
 
 ---
 
@@ -810,6 +810,8 @@ See full template: [examples/config/PULL_REQUEST_TEMPLATE-ai.md](../../examples/
 ## PR Audit Trail
 
 For regulated environments and compliance-conscious orgs, capturing a snapshot of AI activity at PR creation gives you a structured artifact that answers the question "what did Claude do during this change?" without relying on session memory.
+
+If you'd rather query history that already exists than instrument new logging, tools like [cc-sessions](https://github.com/FlorianBruniaux/cc-sessions) search and analyze Claude Code's own session transcripts directly, useful when the question comes up after the fact and no PR-time hook was in place.
 
 ### What to Capture
 
@@ -929,7 +931,7 @@ echo "Report saved: $REPORT_FILE"
 
 ### What This Does Not Cover
 
-The session logger captures tool calls at the Claude Code level. It does not record what the tool actually produced (the file content after an edit, the output of a bash command). For that level of detail, the LiteLLM Gateway approach in [api-gateway.md](./api-gateway.md) captures full request/response pairs at the API level, at the cost of including all prompt content in your logs. Choose based on your compliance requirements and data classification rules.
+The session logger captures tool calls at the Claude Code level. It does not record what the tool actually produced, such as the file content after an edit or the output of a shell command. A third-party gateway such as the LiteLLM example in [api-gateway.md](./api-gateway.md) can add model-level request metadata and, when deliberately configured, payload logging. That covers only routed API traffic, can place sensitive prompt or completion content in another system, and does not prove which file state resulted from a request. Choose the evidence sources and logging fields from the compliance requirement and data classification rules.
 
 ---
 
@@ -937,17 +939,17 @@ The session logger captures tool calls at the Claude Code level. It does not rec
 
 ### In This Guide
 
-- [Git Workflow](#git-workflow) — Claude Code's default Co-Authored-By behavior
-- [Learning with AI](../roles/learning-with-ai.md#the-vibe-coding-trap) — Why understanding AI code matters
-- [Security Hardening](../security/security-hardening.md) — Protecting against prompt injection and other attacks
+- [Git Workflow](#git-workflow): Claude Code's default Co-Authored-By behavior
+- [Learning with AI](../roles/learning-with-ai.md#the-vibe-coding-trap): why understanding AI code matters
+- [Security Hardening](../security/security-hardening.md): protecting against prompt injection and other attacks
 
 ### External Resources
 
-- [git-ai Repository](https://github.com/diggerhq/git-ai) — Checkpoint tracking tool
-- [LLVM AI Policy](https://discourse.llvm.org/t/update-to-the-developer-policy-on-ai-generated-code/84757) — Assisted-by standard
-- [Ghostty CONTRIBUTING.md](https://github.com/ghostty-org/ghostty/blob/main/CONTRIBUTING.md) — Simple disclosure model
-- [Fedora AI Policy](https://docs.fedoraproject.org/en-US/project/ai-policy/) — Governance and accountability
-- [Vibe coding needs git blame](https://quesma.com/blog/vibe-code-git-blame/) — Original article inspiring this guide
+- [git-ai Repository](https://github.com/diggerhq/git-ai): checkpoint tracking tool
+- [LLVM AI Policy](https://discourse.llvm.org/t/update-to-the-developer-policy-on-ai-generated-code/84757): Assisted-by standard
+- [Ghostty CONTRIBUTING.md](https://github.com/ghostty-org/ghostty/blob/main/CONTRIBUTING.md): simple disclosure model
+- [Fedora AI Policy](https://docs.fedoraproject.org/en-US/project/ai-policy/): governance and accountability
+- [Vibe coding needs git blame](https://quesma.com/blog/vibe-code-git-blame/): original article inspiring this guide
 
 ---
 

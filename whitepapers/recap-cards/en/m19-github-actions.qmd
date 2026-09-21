@@ -4,10 +4,10 @@ subtitle: "Integrating Claude Code into GitHub CI/CD pipelines"
 card-number: "M19"
 category: "Methodology"
 difficulty: "advanced"
-guide-version: "3.41.0"
+guide-version: "3.41.3"
 author: "Florian BRUNIAUX"
-version: "3.41.0"
-date: "May 2026"
+version: "3.41.3"
+date: "2026-08-24"
 layout: "two-col"
 lang: en
 format:
@@ -16,7 +16,7 @@ format:
 
 ## Recommended pattern: externalized prompt
 
-The most robust pattern separates review logic from workflow mechanics. The YAML file orchestrates triggers and permissions; the `.github/prompts/code-review.md` file contains the review criteria. Modifying criteria does not require touching the workflow.
+This pattern separates review logic from workflow mechanics. The YAML file orchestrates triggers and permissions; the `.github/prompts/code-review.md` file contains the review criteria. Modifying criteria does not require touching the workflow.
 
 ```
 .github/
@@ -59,7 +59,7 @@ jobs:
       - uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          model: claude-sonnet-4-6
+          model: claude-sonnet-5
           prompt_file: .github/prompts/code-review.md
           allowed_tools: Read,Glob,Grep
 ```
@@ -74,7 +74,7 @@ GitHub MCP tools (`mcp__github__get_pull_request_diff`, `mcp__github__submit_pen
 
 ## Anti-hallucination protocol
 
-The main problem with automated reviews: Claude invents line numbers or reports issues it has not verified. The mitigation protocol consists of explicitly asking in the prompt to verify before any assertion.
+Automated reviews suffer from a recurring problem: Claude invents line numbers or reports issues it has not verified. The mitigation protocol consists of explicitly asking in the prompt to verify before any assertion.
 
 Wording in `code-review.md`:
 

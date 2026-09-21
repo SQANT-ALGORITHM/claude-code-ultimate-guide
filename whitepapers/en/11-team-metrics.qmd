@@ -2,10 +2,10 @@
 title: "Leading a Team in the Age of AI"
 subtitle: "Metrics, adoption, and governance for engineering managers"
 author: "Florian Bruniaux"
-date: 2026-07-02
+date: 2026-08-24
 date-format: "MMMM YYYY"
-version: "3.41.1"
-wp-version: "1.2.0"
+version: "3.43.0"
+wp-version: "1.3.1"
 series: "Claude Code Ultimate Guide"
 format:
   whitepaper-typst:
@@ -33,7 +33,7 @@ lang: en
 
 **Key takeaways**:
 
-- The 4 DORA metrics recalibrated for an AI context (and why they behave differently)
+- The 5 current DORA metrics recalibrated for an AI context
 - The 5 AI-specific signals that standard frameworks don't cover, plus the agentic metrics DORA misses entirely
 - The minimal stack by team size: 5 tools for 5 people, not 20
 - The 6 vanity metrics to drop starting tomorrow
@@ -45,19 +45,19 @@ lang: en
 
 Adopting AI in development changes delivery speed fast enough to break most existing benchmarks. A team that shipped 2 features per sprint in 2022 can now ship 6, with AI generating 70 to 90% of the code. That looks like a win on every traditional dashboard, and it may genuinely be a win. Or velocity is masking superficial reviews, skill atrophy, and growing technical debt that nobody fully understands.
 
-The core tension: activity metrics rise immediately when you adopt AI tools, but quality and maintainability signals are slower and harder to instrument. Sprint velocity, daily commits, lines written: everything goes up. Production bug rate, PR comprehension time, developer confidence: those are the ones that will tell you the truth 6 months from now.
+Activity metrics rise immediately when you adopt AI tools, but quality and maintainability signals are slower and harder to instrument. Sprint velocity, daily commits, lines written: everything goes up. Production bug rate, PR comprehension time, developer confidence: those are the ones that will tell you the truth 6 months from now.
 
 This guide gives engineering managers, tech leads, and CTOs a practical metrics stack: the DORA foundation recalibrated for an AI context, human factors through SPACE, and the AI-specific signals that standard frameworks don't cover.
 
 ## What Anthropic Data Confirms
 
-Anthropic's internal data (January 2026) is clear: **+67% PRs merged per engineer per day**, with 70 to 90% of shipped code AI-assisted. Not a marketing projection, not a controlled demo: production numbers from a mature engineering team using Claude Code in real conditions.
+Anthropic reported **+67% PRs merged per engineer per day** in January 2026 and 70 to 90% AI-assisted shipped code in an earlier internal study. These figures describe Anthropic's own environment. They are useful context, not an independent benchmark or a target for another team.
 
-The practical consequence: "Medium" on DORA benchmarks is no longer a credible target for a team using AI tools at full capacity. If your team stagnates at "Medium" on deployment frequency or lead time after AI adoption, the constraint is in your processes and pipeline, not in developer productivity. Adjust your targets accordingly.
+Compare one service against its own pre-adoption baseline. If coding time falls but change lead time does not, the constraint is likely in review, validation, or deployment rather than code generation.
 
 # The DORA Foundation
 
-DORA (DevOps Research and Assessment) measures the health of your delivery system, not individual contributors. That distinction matters: it keeps metrics conversations focused on process improvement rather than surveillance. It's also the most validated framework in the domain, backed by years of research across thousands of organizations.
+DORA (DevOps Research and Assessment) measures the health of a software delivery system, not individual contributors. The [current DORA guide](https://dora.dev/guides/dora-metrics/), updated January 5, 2026, defines five metrics grouped into throughput and instability. Apply them to one application or service at a time.
 
 ## Deployment Frequency
 
@@ -65,33 +65,15 @@ DORA (DevOps Research and Assessment) measures the health of your delivery syste
 
 **How to measure**: Count production deployments per day, week, or month. Most CI/CD tools expose this directly (GitHub Actions, CircleCI, Vercel, etc.).
 
-**2024 benchmarks**:
-
-| Tier | Frequency |
-|------|-----------|
-| Elite | Multiple times per day |
-| High | Once per day to once per week |
-| Medium | Once per week to once per month |
-| Low | Less than once per month |
-
 **In an AI context**: AI accelerates feature development, so your cadence should increase, provided your pipeline keeps up. If deployment frequency stays flat after widespread AI adoption, the bottleneck is downstream: staging environments, manual QA, review throughput. AI gives you more PRs to merge; it doesn't automatically improve the rest of the pipeline.
 
 **Warning signal**: deployment frequency rising while Change Failure Rate also rises. That's AI-accelerated code that isn't being reviewed seriously.
 
-## Lead Time for Changes
+## Change Lead Time
 
 **What it measures**: Time between a commit and that code in production.
 
 **How to measure**: Timestamp at commit, timestamp at deployment. The delta is your lead time. Tools like LinearB and Faros.ai automate this from your CI/CD pipeline.
-
-**2024 benchmarks**:
-
-| Tier | Lead Time |
-|------|-----------|
-| Elite | Less than 1 hour |
-| High | 1 hour to 1 week |
-| Medium | 1 week to 1 month |
-| Low | More than 6 months |
 
 **In an AI context**: AI reduces coding time but has limited effect on non-code segments of lead time. PR review, staging validation, context-switching delays, and deployment windows are largely unchanged by AI assistance. If your lead time doesn't improve alongside AI adoption, the constraint is in review velocity or pipeline automation, not in coding.
 
@@ -103,41 +85,31 @@ DORA (DevOps Research and Assessment) measures the health of your delivery syste
 
 **How to measure**: (Failed deployments) / (Total deployments). "Failed" means requiring a hotfix, rollback, or incident response. Define that clearly before measuring.
 
-**2024 benchmarks**:
-
-| Tier | Rate |
-|------|------|
-| Elite | 0-5% |
-| High | 5-10% |
-| Medium | 10-15% |
-| Low | More than 15% |
-
 **In an AI context**: This is the metric most at risk when AI adoption outpaces review discipline. AI generates syntactically correct and structurally plausible code that can still have subtle behavioral errors. Teams that treat AI-generated PRs as "lower risk" and rubber-stamp them see their CFR rise progressively over 6 to 12 months.
 
 **Recommendation**: Track CFR separately for AI-generated code and manually written code. If the AI CFR is significantly higher, your review process needs reinforcement, not your AI tools.
 
-## Mean Time to Recovery (MTTR)
+## Failed Deployment Recovery Time
 
-**What it measures**: How long it takes to restore service after a production incident.
+**What it measures**: Time to recover from a failed deployment that requires immediate intervention.
 
-**How to measure**: Time between the incident alert and service restored. Track in your incident management system.
+**How to measure**: Link the failed deployment, incident, intervention, and recovery timestamp. Exclude failures unrelated to a software change.
 
-**2024 benchmarks**:
+**In an AI context**: AI-assisted diagnosis can reduce recovery time when the model can inspect deployment metadata, logs, traces, and code. Measure the recovery-time distribution, false diagnoses, and human intervention time. A demo is not evidence of improvement.
 
-| Tier | MTTR |
-|------|------|
-| Elite | Less than 1 hour |
-| High | Less than 1 day |
-| Medium | 1 day to 1 week |
-| Low | More than 1 week |
+## Deployment Rework Rate
 
-**In an AI context**: AI genuinely helps here, provided observability is already in place. AI-assisted diagnosis can significantly reduce time to root cause when the model has access to error logs, stack traces, and codebase context. But AI diagnosis is only as good as the signals it can read. Sequencing matters: instrument first, then wait for MTTR improvement from AI.
+**What it measures**: The ratio of deployments that are unplanned work caused by a production incident.
 
-## The 2025 DORA Evolution
+**How to measure**: Divide unplanned corrective deployments by total deployments over the same period, with each corrective deployment linked to its incident.
 
-The DORA 2025 report made a significant methodological change: the four-tier model (Elite/High/Medium/Low) has been abandoned. DORA now identifies **7 organizational archetypes** covering expanded dimensions: throughput, stability, team performance, product performance, individual efficiency, time on value work, friction, and burnout.
+**In an AI context**: Generation speed can hide hotfixes, rollbacks, and follow-up deployments. Attach token cost and human review time to this rework. A higher deployment frequency with a rising rework rate is not a throughput improvement.
 
-The consequence for teams: stop chasing "Elite" as an endpoint. "Elite" on deployment frequency can coexist with burnout and high friction. The new model pushes you to identify your archetype and improve your weakest dimensions rather than optimizing metrics where you're already strong.
+## From Four Keys to Five Metrics
+
+The [official history](https://dora.dev/insights/dora-metrics-history/) records two changes that many dashboards still miss. DORA replaced MTTR with Failed Deployment Recovery Time in 2023, then added Deployment Rework Rate in 2024. The current model therefore has five metrics.
+
+The 2025 report also replaced the old Elite, High, Medium, and Low clusters with seven broader team archetypes. Historical tier tables are not current universal targets. Compare one service against its own baseline and improve its main constraint.
 
 # Beyond DORA: The SPACE Framework
 
@@ -215,7 +187,7 @@ AI-generated code requires at least as much scrutiny at review as manually writt
 
 A binary qualitative signal: during a PR review, can the author explain their AI-generated code in their own words, not just what it does but why it does it that way?
 
-Track this informally through your code review culture. If reviewers start noticing that authors can't explain their AI-generated submissions, that's a skill atrophy signal that will manifest in higher CFR and longer MTTR 6 to 12 months from now.
+Track this informally through your code review culture. If reviewers start noticing that authors can't explain their AI-generated submissions, that's a skill atrophy signal that can later appear as higher CFR and longer failed deployment recovery time.
 
 ## PR Comprehension Time
 
@@ -231,7 +203,7 @@ DORA and SPACE were designed for deterministic software systems. Agents introduc
 
 DORA measures pipeline health, not output correctness. A study of 39 agent frameworks and 439 agentic applications (arXiv 2509.19185) found that 70% of test effort concentrates on deterministic components (tools, workflows) while less than 5% covers the LLM Plan Body, the central reasoning component most likely to produce incorrect results. Most DORA tooling has the same blind spot.
 
-A second structural gap: DORA doesn't capture the cost of the verification loop. Agent-generated PRs require at least as much review scrutiny as manually written code, and in practice more, because subtle behavioral errors can appear in syntactically correct code. Standard deployment frequency and lead time metrics look identical whether review is thorough or rubber-stamped.
+DORA doesn't capture the cost of the verification loop either. Agent-generated PRs require at least as much review scrutiny as manually written code, and in practice more, because subtle behavioral errors can appear in syntactically correct code. Standard deployment frequency and lead time metrics look identical whether review is thorough or rubber-stamped.
 
 ## Group 1: RCT-Verifiable Metrics
 
@@ -258,6 +230,22 @@ These require instrumentation via Langfuse, Arize Phoenix, or AWS Bedrock AgentC
 | Cost per completed task | Token spend plus human review time per agent task that reaches a mergeable state | No industry benchmark published yet. Track manually: tokens consumed, cost per model call, human review hours per task completion |
 | Tokens per feature | Average tokens consumed per merged feature, crossed with Jira or Linear ticket boundaries. A better signal than tokens per request because it accounts for session count variation per feature | No industry benchmark. Track via ccboard's project leaderboard (tokens per session times sessions per feature). Establish a baseline before optimizing; typical range for a complete PR is 500K-2M tokens on complex codebases |
 
+## Test a Harness Before Standardizing It
+
+A harness trial should compare two or three candidates on the same real tasks, with the same instructions and model where possible. Write pass criteria before the trial, isolate each candidate in its own worktree, and retain the traces that explain the result. A public benchmark can inform the shortlist; it cannot replace that local test.
+
+| Measurement | Decision question |
+|-------------|-------------------|
+| Human verdict | Is the change acceptable without unplanned rework? |
+| Interventions | How many human corrections or redirects were needed? |
+| Plan drift | Did the work stay within the stated scope and contract? |
+| Wall time | What elapsed time passed from launch to verified result? |
+| Accepted-task cost | What cost belongs to tasks the team actually accepted? |
+| Recovery | What remains after a failure, interruption, or rejection? |
+| Setup friction | Which permissions, dependencies, and operations remain to maintain? |
+
+The [Agent Harness Map test protocol](https://cc.bruniaux.com/guide/agent-harness-landscape/) connects these measures to the choice between a runtime, repository contract, and orchestrator. They complement DORA; they do not measure people.
+
 ## Group 3: Agent Governance Metrics
 
 Sourced from Strata Identity Research 2026 and CSA/Zenity 2026. These reflect the state of organizational maturity rather than technical performance.
@@ -271,7 +259,9 @@ Sourced from Strata Identity Research 2026 and CSA/Zenity 2026. These reflect th
 
 ## The Heavy-User Review Time Contradiction
 
-Digital Applied Q1 2026 (n=2,847 developers) found that heavy AI tool users spend 14-16 hours per week reviewing AI-generated code, compared to 11.4 hours per week for average users. This directly contradicts the narrative that AI reduces review burden. The most likely explanation: per-review unit efficiency may improve, but the volume of generated code grows faster than review capacity. Before committing to time-savings projections, measure your team's actual review time distribution across AI-generated and manually written PRs.
+Digital Applied Q1 2026 (n=2,847 developers) found that heavy AI tool users spend 14-16 hours per week reviewing AI-generated code, compared to 11.4 hours per week for average users. This directly contradicts the narrative that AI reduces review burden. Per-review unit efficiency may improve, but the volume of generated code grows faster than review capacity, the most likely explanation for the gap. Before committing to time-savings projections, measure your team's actual review time distribution across AI-generated and manually written PRs.
+
+Review effectiveness has a ceiling that predates AI and hasn't moved: detection degrades sharply past roughly 200-400 lines per review, or 60-90 minutes of sustained reviewing (Cisco/SmartBear, Cohen 2006). A 14-16 hour weekly review load is therefore not 14-16 hours of equivalent-quality review. See [The Attention Cost of the Review Shift](https://github.com/FlorianBruniaux/claude-code-ultimate-guide/blob/main/guide/roles/learning-with-ai.md#the-attention-cost-of-the-review-shift) for the underlying studies and the practices that keep review inside the effective band.
 
 ## The Uplevel Copilot Study
 
@@ -339,7 +329,7 @@ The instinct at this size is often to skip metrics entirely ("we're too small, w
 
 | Metric | How | Frequency |
 |--------|-----|-----------|
-| All 4 DORA metrics | LinearB or Faros.ai automated | Weekly (automated) |
+| All 5 DORA metrics | LinearB or Faros.ai automated, after checking definitions | Weekly (automated) |
 | Cycle time by squad (not global) | Same tooling, segmented | Weekly |
 | Bug Escape Rate | Issue tracker plus deployment markers | Monthly |
 | Feature CSAT | In-app survey on key features | Per release |
@@ -424,7 +414,7 @@ The starter table above covers what most teams reach for first. The 2026 market 
 
 ## AI-Generated Board Narratives
 
-A genuinely new 2026 capability: some of these platforms now generate a written narrative from the metrics they already compute, rather than leaving that translation to a human. Two concrete examples.
+In 2026, some of these platforms now generate a written narrative from the metrics they already compute, rather than leaving that translation to a human, a genuinely new capability. Two concrete examples.
 
 **LinearB** generates an AI iteration summary from Jira, Git, PR, and deployment data, structured around three axes: what went well, what didn't, and what could improve. It's delivered automatically to Slack or Microsoft Teams at sprint end, replacing the manual retro write-up a tech lead would otherwise produce.
 
@@ -440,7 +430,7 @@ Every benchmark so far in this whitepaper answers "how are we doing." This secti
 
 ## Why a Point Estimate Misleads
 
-Traditional forecasting takes your velocity (story points or throughput per sprint) and divides it into remaining scope to produce a single date. That date carries false precision: it implies a certainty the underlying data never had. Two teams with identical average velocity can have wildly different variance, and variance is exactly what a point estimate throws away.
+Traditional forecasting takes your velocity (story points or throughput per sprint) and divides it into remaining scope to produce a single date. That date carries false precision, implying a certainty the underlying data never had. Two teams with identical average velocity can have wildly different variance, and variance is exactly what a point estimate throws away.
 
 Monte Carlo forecasting instead runs your team's actual historical cycle times (or throughput) through thousands of simulated iterations and produces a distribution: "80% confidence between March 3 and March 20" instead of "March 12." That's a more honest answer, because it's the one your data can actually support.
 
@@ -464,7 +454,7 @@ The most common failure mode in metrics programs is trying to instrument everyth
 
 ## Phase 1 (Weeks 1-2): Instrument DORA
 
-Connect your CI/CD pipeline to a metrics tool. For most teams, that means connecting GitHub Actions (or equivalent) to LinearB, Faros, or Sleuth. Automate Deployment Frequency and Lead Time first; they require the least manual setup. Change Failure Rate and MTTR require incident tracking to be in place, which takes a bit more time to configure.
+Connect your CI/CD pipeline to a metrics tool. For most teams, that means connecting GitHub Actions or its equivalent to LinearB, Faros, or Sleuth. Automate Deployment Frequency and Change Lead Time first. Change Fail Rate, Failed Deployment Recovery Time, and Deployment Rework Rate require deployment-to-incident linkage.
 
 **Output**: a live dashboard showing at minimum Deployment Frequency and Lead Time for Changes. Your first baseline numbers.
 
@@ -486,7 +476,7 @@ Everything above this section assumes the audience is your own team or your engi
 
 ## The Diagnostic: Doubt Is a Trust Problem, Not a Data Problem
 
-When a board starts doubting a team's delivery capacity after past estimates have slipped, adding more delivery dashboards rarely fixes it on its own. The board's doubt is almost always about trust and visibility: what caused the slip, and will it happen again. It is much less often about the data itself: board members generally don't disbelieve the velocity number on the screen, they disbelieve the story that number is supposed to support.
+When a board starts doubting a team's delivery capacity after past estimates have slipped, adding more delivery dashboards rarely fixes it on its own. The board's doubt is almost always about trust and visibility, about what caused the slip and whether it will happen again. It is much less often about the data itself: board members generally don't disbelieve the velocity number on the screen, they disbelieve the story that number is supposed to support.
 
 ::: {.callout-warning title="An evidence gap, stated plainly"}
 No published study or vendor report actually measures whether delivery-intelligence tooling repairs executive trust. That's a gap in the field, not a gap in this whitepaper. Nothing here, and none of the tools covered earlier, comes with proof that it fixes a board's confidence. What follows reframes the conversation into one a board can act on, not a guaranteed remedy.
@@ -494,7 +484,7 @@ No published study or vendor report actually measures whether delivery-intellige
 
 ## Bring Scenarios, Not a Velocity Chart
 
-A single velocity number invites a single question: can the team go faster. That's rarely the question worth answering, and it's an easy one to lose regardless of the real numbers behind it.
+A single velocity number invites a single question, whether the team can go faster. That's rarely the question worth answering, and it's an easy one to lose regardless of the real numbers behind it.
 
 Bring 2 to 3 named delivery scenarios instead, each with a concrete timeline, a rework or cost estimate if sequencing gets compressed, and the business impact of picking that option. "Ship the full scope in Q3 at current pace" versus "compress two workstreams into Q2 at an estimated higher defect rate and additional engineer-weeks of rework" versus "cut scope and ship on the original date" is a decision a board can actually make. "Can the team go faster" is not.
 
@@ -533,7 +523,8 @@ Neither substitutes for the harder work above. A better forecast and a better-wr
 **Phase 2: Quality signal (months 2-4)**
 
 - Change Failure Rate (global + by AI/manual origin)
-- MTTR
+- Failed Deployment Recovery Time
+- Deployment Rework Rate
 - Bug Escape Rate
 - % AI-assisted code
 
@@ -555,9 +546,9 @@ For regulated environments and compliance-conscious orgs, a PR audit trail captu
 # See Also
 
 - [Team Metrics: Reference Guide](https://cc.bruniaux.com/guide/team-metrics/): full version with dashboards and additional resources
-- [Session Observability](https://cc.bruniaux.com/guide/ops/observability/): Claude Code session monitoring, cost tracking, usage patterns
-- [AI Traceability](https://cc.bruniaux.com/guide/ops/ai-traceability/): AI contribution auditing, attribution, and compliance
-- [Team Deployment](https://cc.bruniaux.com/guide/roles/team-deployment/): Claude Code team adoption, CI/CD, champions program
+- [Session Observability](https://cc.bruniaux.com/guide/observability/): Claude Code session monitoring, cost tracking, usage patterns
+- [AI Traceability](https://cc.bruniaux.com/guide/ai-traceability/): AI contribution auditing, attribution, and compliance
+- [Choosing Your Adoption Approach](https://cc.bruniaux.com/guide/adoption-approaches/): Claude Code team adoption patterns, CLAUDE.md configuration strategies
 
 # The Series
 

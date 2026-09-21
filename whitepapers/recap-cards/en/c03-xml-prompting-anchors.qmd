@@ -4,10 +4,10 @@ subtitle: "Structuring complex prompts for reproducible results"
 card-number: "C03"
 category: "Design"
 difficulty: "advanced"
-guide-version: "3.41.1"
+guide-version: "3.41.3"
 author: "Florian BRUNIAUX"
-version: "3.41.1"
-date: "May 2026"
+version: "3.41.3"
+date: "August 2026"
 layout: "two-col"
 lang: en
 format:
@@ -16,7 +16,7 @@ format:
 
 ## Why XML works
 
-Claude was trained on massive corpora that include XML. When you structure a prompt with tags, you create unambiguous delimiters that separate the instruction, context, reference code, and constraints. The result: Claude interprets each section exactly in the role you assign it, without having to infer what is instruction and what is context.
+Claude was trained on massive corpora that include XML. When you structure a prompt with tags, you create unambiguous delimiters that separate the instruction, context, reference code, and constraints. Claude then interprets each section exactly in the role you assign it, without having to infer what is instruction and what is context.
 
 XML structure is relevant for complex or reusable tasks. For a one-line fix, it is unnecessary noise.
 

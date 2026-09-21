@@ -2,9 +2,11 @@
 
 **Time**: 45 minutes | **Complexity**: ⭐ Beginner
 
+**Previous:** [Module 01: Installation & Setup](01-installation.md)
+
 ## Goal
 
-Understand how Claude Code actually works—the decision loop, context, and how to structure requests effectively.
+Understand how Claude Code actually works: the decision loop, context, and how to structure requests effectively.
 
 ---
 
@@ -301,11 +303,11 @@ VERIFY: Write tests in tests/validators.test.js
 
 ✓ Be specific (WHAT/WHERE/HOW/VERIFY) for faster results
 
-✓ Context is finite—watch your percentage and `/compact` at 70%+
+✓ Context is finite, watch your percentage and `/compact` at 70%+
 
 ✓ `/plan` for risky changes, normal mode for safe ones
 
-✓ Sessions are temporary—use `/checkpoint` to save important work
+✓ Sessions are temporary, use `/checkpoint` to save important work
 
 ---
 
@@ -331,4 +333,4 @@ This will teach you how to make Claude Code remember your style and preferences.
 
 ---
 
-**Completed Module 02?** → Ready for Module 03: Memory & Config
+**Completed Module 02?** → Ready for [Module 03: Memory & Config](03-memory.md)

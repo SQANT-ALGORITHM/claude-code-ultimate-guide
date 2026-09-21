@@ -41,6 +41,12 @@ Structure complex tasks with planning mode before execution.
 
 **When to use**: Multi-step features, architectural changes, uncertainty about approach
 
+### [AI-Assisted Open Source Contributions](./ai-assisted-open-source-contributions.md)
+
+Prepare a contribution with a reproduced problem, author explanation, verification evidence and responsibility for maintainer feedback. Includes a reusable contribution packet.
+
+**When to use**: Claude Code helps prepare a patch for another project's maintainers.
+
 ### [TDD with Claude](./tdd-with-claude.md)
 
 Test-Driven Development workflow: write tests first, implement after.
@@ -58,6 +64,14 @@ Write specifications before code for better requirements clarity.
 Improve code through multiple refinement cycles.
 
 **When to use**: Quality improvements, performance optimization, code cleanup
+
+### [Best-of-N: Generate, Select, and Verify](./best-of-n.md)
+
+Generate a declared set of independent candidates, score every candidate against a frozen rubric, verify the selected result outside its generation context, and preserve the proof log.
+
+**When to use**: Several plausible solutions with material trade-offs and a reviewer or executable check that can distinguish them
+
+**Reusable assets**: [Best-of-N skill](../../examples/skills/best-of-n/SKILL.md) and [TESTING.md proof record](../../examples/claude-md/TESTING.md)
 
 ### [Skeleton Projects](./skeleton-projects.md) ⭐ NEW
 
@@ -137,7 +151,7 @@ Non-redundant architecture for three automated reviewers on the same PR: Claude 
 
 Switch between specialist roles across your ship cycle: strategic product gate, architecture review, paranoid code review, automated release, native browser QA, and retrospective.
 
-**When to use**: Ship cycles where you want explicit separation between product direction, engineering rigor, review, and release — rather than one generic assistant handling all phases
+**When to use**: Ship cycles where you want explicit separation between product direction, engineering rigor, review, and release, rather than one generic assistant handling all phases
 
 ---
 
@@ -165,7 +179,7 @@ Generate professional PDFs using Quarto/Typst with Claude Code.
 
 6-stage skill pipeline: raw material → structured talk → AI-generated slides via Kimi.
 
-**When to use**: Conference talks, meetup presentations, internal tech talks — from article, transcript, or notes
+**When to use**: Conference talks, meetup presentations, internal tech talks (from article, transcript, or notes)
 
 ### [TTS Setup](./tts-setup.md)
 
@@ -240,6 +254,18 @@ Multi-session task tracking with TodoWrite, tasks API, and context persistence a
 
 **When to use**: Long-running tasks spanning multiple sessions, team coordination, complex backlogs
 
+### [Cross-Session Messaging](./cross-session-messaging.md) ⭐ NEW
+
+`ListAgents` and `SendMessage`: how independent, already-running Claude Code sessions discover and message each other, on the same machine or across your account, without a human relaying context between terminals.
+
+**When to use**: Coordinating sessions you started and steer yourself (parallel worktrees, per-role sessions, cross-machine hand-offs), distinct from Agent Teams (a lead session spawns and supervises its own teammates)
+
+**Key Topics**:
+- `ListAgents` discovery: subagents, teammates, local peers, cloud, Remote Control
+- Same-machine socket delivery vs. cross-machine Remote Control routing
+- Security model: `crossSessionInbound`, `isolatePeerMachines`, why a peer message never carries authority
+- Version timeline and limitations (message size cap, burst throttling)
+
 ---
 
 ## Quick Selection Guide
@@ -249,6 +275,7 @@ Multi-session task tracking with TodoWrite, tasks API, and context persistence a
 | **New to codebase** | [Exploration Workflow](./exploration-workflow.md) + [Search Tools Mastery](./search-tools-mastery.md) |
 | **Complex feature** | [Plan-Driven](./plan-driven.md) or [Spec-First](./spec-first.md) |
 | **Need reliability** | [TDD with Claude](./tdd-with-claude.md) |
+| **Several plausible solutions with a stable rubric** | [Best-of-N](./best-of-n.md) |
 | **Large refactoring** | [Search Tools Mastery](./search-tools-mastery.md) |
 | **UI implementation** | [Design to Code](./design-to-code.md) |
 | **Code quality** | [Iterative Refinement](./iterative-refinement.md) |
@@ -260,6 +287,7 @@ Multi-session task tracking with TodoWrite, tasks API, and context persistence a
 | **Documentation** | [PDF Generation](./pdf-generation.md) |
 | **Social previews** | [OG Image Generation](./og-image-generation.md) |
 | **Conference talk from raw material** | [Talk Preparation Pipeline](./talk-pipeline.md) |
+| **Distribute a guide asset with attribution** | [Guide Distribution](../../docs/workflows/guide-distribution.md) |
 | **Audio feedback** | [TTS Setup](./tts-setup.md) |
 | **Deterministic multi-agent orchestration** | [Dynamic Workflows](./dynamic-workflows.md) |
 | **Multi-agent tasks** | [Agent Teams](./agent-teams.md) |
@@ -268,6 +296,7 @@ Multi-session task tracking with TodoWrite, tasks API, and context persistence a
 | **Hook-driven automation** | [Event-Driven Agents](./event-driven-agents.md) |
 | **Full plan workflow** | [Plan Pipeline](./plan-pipeline.md) |
 | **Multi-session tracking** | [Task Management](./task-management.md) |
+| **Coordinating sessions you already have open** | [Cross-Session Messaging](./cross-session-messaging.md) |
 | **Strategic gate before coding** | [Cognitive Mode Switching](./gstack-workflow.md) |
 | **Non-MCP browser automation** | [Cognitive Mode Switching](./gstack-workflow.md) |
 

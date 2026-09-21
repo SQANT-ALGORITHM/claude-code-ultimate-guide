@@ -6,18 +6,31 @@ tags: [guide, config, workflows]
 
 # Choosing Your Adoption Approach
 
-> **Disclaimer**: Claude Code is young (~1 year). Nobody has definitive answers yet — including this guide. These are starting points based on observed patterns, not proven best practices. Adapt heavily to your context.
+> **Disclaimer**: Claude Code is young (~1 year). Nobody has definitive answers yet, including this guide. These are starting points based on observed patterns, not proven best practices. Adapt heavily to your context.
 
 ---
+
+## Open contribution without granting unrestricted delivery
+
+In [IFTTD episode 371](https://www.ifttd.io/episodes/everyone-can-build), Alexandre Gerlic describes Alan's Everyone Can Build initiative: non-engineers initially worked on frontend changes, using the engineering environment, with backend and database changes outside that scope. Engineers reviewed the resulting pull requests, including typo fixes. His reported contribution volume is a field account, not a controlled measurement of collective productivity.
+
+| Responsibility | Make explicit before the first contribution |
+|---|---|
+| Contributor | Product intent, permitted change class, explanation and checks they can perform |
+| Engineering reviewer | Technical consequences, missing evidence and ownership after integration |
+| Agent | Allowed files, tools and effects, independently of the contributor's personal permissions |
+| Release authority | Who or which tested policy may merge and deploy this class of change |
+
+An [Alan Product Crew interview at 10:49](https://www.youtube.com/watch?v=2quWpI_VSDQ&t=649s) also describes engineering pairing and responsibility for merging. This is another account of the same organization, not an independent replication. Track review effort and assistance over subsequent changes before claiming durable team gains. Teaching a non-engineer a bounded contribution workflow is also different from training a junior engineer; use [Learning with AI](learning-with-ai.md) for the latter.
 
 ## What We Don't Know Yet
 
 Before diving in, here's what remains genuinely uncertain:
 
-- **Optimal CLAUDE.md size** — Some teams thrive with 10 lines, others with 100. No clear winner.
-- **Team adoption patterns** — Whether top-down standardization beats organic adoption is unproven.
-- **Context management thresholds** — The 70%/90% numbers are heuristics, not science.
-- **ROI of advanced features** — MCP servers, hooks, agents — unclear when the setup cost pays off.
+- **Optimal CLAUDE.md size**: Some teams thrive with 10 lines, others with 100. No clear winner.
+- **Team adoption patterns**: Whether top-down standardization beats organic adoption is unproven.
+- **Context management thresholds**: The 70%/90% numbers are heuristics, not science.
+- **ROI of advanced features**: MCP servers, hooks, agents. Unclear when the setup cost pays off.
 
 If anyone tells you they've figured this out, they're ahead of the field or overconfident.
 
@@ -73,10 +86,10 @@ Both practices have measured backing, and the numbers behind them are worth read
 
 | Your Context | One Approach to Try |
 |--------------|---------------------|
-| Limited setup time | **Turnkey** — minimal config, iterate based on friction |
-| Solo developer | **Autonomous** — learn concepts first, configure when needed |
-| Small team (4-10) | **Hybrid** — shared basics + room for personal preferences |
-| Larger team (10+) | **Turnkey + docs** — consistency matters more at scale |
+| Limited setup time | **Turnkey**: minimal config, iterate based on friction |
+| Solo developer | **Autonomous**: learn concepts first, configure when needed |
+| Small team (4-10) | **Hybrid**: shared basics + room for personal preferences |
+| Larger team (10+) | **Turnkey + docs**: consistency matters more at scale |
 
 These are hypotheses. Your mileage will vary.
 
@@ -139,7 +152,7 @@ What's this project's test command?
 ```
 
 **Pass**: Returns your configured command.
-**Fail**: CLAUDE.md not loaded — check path is `.claude/CLAUDE.md` or `./CLAUDE.md`
+**Fail**: CLAUDE.md not loaded. Check path is `.claude/CLAUDE.md` or `./CLAUDE.md`
 
 ### Step 3: First Real Task
 
@@ -155,14 +168,14 @@ Claude should reference your stack and conventions automatically.
 
 ## Autonomous Learning Path
 
-If you prefer understanding before configuring, here's a progressive approach. No time estimates — speed depends on your familiarity with AI tools.
+If you prefer understanding before configuring, here's a progressive approach. No time estimates: speed depends on your familiarity with AI tools.
 
 ### Phase 1: Mental Model
 
 **Goal**: Understand how Claude Code operates before adding config.
 
 1. Read [Section 5: Mental Model](../ultimate-guide.md) (line 1675)
-2. Core concept: Claude works in a loop — prompt → plan → execute → verify
+2. Core concept: Claude works in a loop, prompt → plan → execute → verify
 3. **Try it**: Complete a few real tasks with zero config. Notice where friction appears.
 
 ### Phase 2: Context Management
@@ -212,7 +225,7 @@ claude /status            # Shows context info
 claude /mcp               # Lists MCP servers (may be empty)
 ```
 
-If these fail: installation issue — try `claude doctor`.
+If these fail, that's an installation issue: try `claude doctor`.
 
 ### Config Is Being Read
 
@@ -230,7 +243,7 @@ This develops naturally with use. If you never think about context, either you'r
 
 **Signal**: You've either created something (agent, hook, command) that helps, or you haven't needed to.
 
-Both are fine. Extensions are optional — don't add them just to have them.
+Both are fine. Extensions are optional; don't add them just to have them.
 
 ---
 
@@ -245,7 +258,7 @@ These patterns seem problematic based on observations, though individual experie
 | **No shared conventions** | Team members diverge, onboarding confusion | Document a few essentials |
 | **Everything enabled immediately** | Complexity without clear benefit | Enable features when you need them |
 
-These aren't universal truths — some teams thrive with large configs or full feature sets.
+These aren't universal truths; some teams thrive with large configs or full feature sets.
 
 ---
 
@@ -320,20 +333,20 @@ At this scale, individual team setups are not enough. You need a shared config b
 
 **Phased rollout approach:**
 
-**Phase 1 — Foundation (Week 1–2)**: Establish the governance baseline.
+**Phase 1: Foundation (Week 1-2)**: Establish the governance baseline.
 - Create org-level shared config repo (`.claude/` templates per tier)
 - Publish AI Usage Charter (see [charter template](../../examples/scripts/ai-usage-charter-template.md))
 - Start MCP registry with currently-used MCPs (even if just 3 entries)
 - Install global safety hooks on all developer machines via onboarding script
 
-**Phase 2 — Adoption (Week 3–6)**: Roll out project configs.
+**Phase 2: Adoption (Week 3-6)**: Roll out project configs.
 - Classify existing projects by tier (Starter / Standard / Strict / Regulated)
 - Bootstrap each project with the appropriate tier config via setup script
 - Add Claude Code onboarding to engineering onboarding checklist
 - Run first governance audit to baseline the current state
 
-**Phase 3 — Optimization (Month 2–3)**: Refine based on friction.
-- Review hook false positive rate — tune rules that block legitimate work
+**Phase 3: Optimization (Month 2-3)**: Refine based on friction.
+- Review hook false positive rate; tune rules that block legitimate work
 - Identify MCP requests and process them through registry workflow
 - Add CI/CD governance gates to catch config drift
 - Conduct first quarterly MCP registry review
@@ -421,6 +434,20 @@ But also: maybe you don't need more complexity. Simple setups work for many team
 
 ---
 
+## Start / Build / Scale: A Practical Navigation Layer
+
+Start, Build, and Scale answer a different question from the L0-L5 scale below. L0-L5 describes increasing autonomy in the software delivery system. Start, Build, and Scale describe the next adoption decision for a person or team. One does not replace or calculate the other.
+
+| Path | Decision boundary | Observable exit condition | Frequent L0-L5 overlap, not a mapping |
+|------|-------------------|---------------------------|----------------------------------------|
+| **Start** | Use Claude Code on one real, isolated task while preserving human understanding and control. | The user can explain the change, run the relevant verification, and recover or revert safely. | Often L1-L2 |
+| **Build** | Turn individual practice into a repeatable workflow with maintained context and explicit verification. | Another person can run the workflow from versioned instructions and reach a defined terminal state. | Often L2-L3 |
+| **Scale** | Operate the workflow under team, volume, security, reliability, or cost constraints. | Shared controls define ownership, permissions, evidence, escalation, and measurable outcomes. | Often L3+, but a team can scale controls around lower-autonomy work |
+
+The overlap column is descriptive. It is not a promotion ladder or a maturity score. A team may need Scale controls for a tightly constrained L2 workflow because many people use it or because the repository is sensitive. A solo developer may operate an advanced L3 harness without facing an organizational Scale problem.
+
+Use this layer to choose the next guide section. Use L0-L5 when you need to discuss system autonomy. Measure both with observable behavior rather than a self-assigned label.
+
 ## The L0-L5 Scale: Where Is Your Team?
 
 Dan Shapiro (CEO Glowforge) published this framework in January 2026, drawing an explicit parallel with the SAE autonomy levels for self-driving vehicles. The original publication is at [factorydark.com](https://factorydark.com). Simon Willison summarized it at [simonwillison.net/2026/Jan/28/the-five-levels](https://simonwillison.net/2026/Jan/28/the-five-levels/). The name "Five Levels" covers L0-L5 (six levels total).
@@ -488,12 +515,12 @@ Most people start with Sonnet. Adjust based on your experience.
 
 ## Related Resources
 
-- [Personalized Onboarding](../../tools/onboarding-prompt.md) — Interactive setup
-- [Setup Audit](../../tools/audit-prompt.md) — Diagnose configuration issues
-- [Examples Library](../../examples/README.md) — Templates to adapt
-- [Main Guide](../ultimate-guide.md) — Full reference
-- [Reference YAML](../../machine-readable/reference.yaml) — Condensed lookup
+- [Personalized Onboarding](../../tools/onboarding-prompt.md): Interactive setup
+- [Setup Audit](../../tools/audit-prompt.md): Diagnose configuration issues
+- [Examples Library](../../examples/README.md): Templates to adapt
+- [Main Guide](../ultimate-guide.md): Full reference
+- [Reference YAML](../../machine-readable/reference.yaml): Condensed lookup
 
 ---
 
-*This guide reflects current observations, not proven best practices. The field is young — adapt heavily to your context. Feedback welcome: [CONTRIBUTING.md](../../CONTRIBUTING.md)*
+*This guide reflects current observations, not proven best practices. The field is young; adapt heavily to your context. Feedback welcome: [CONTRIBUTING.md](../../CONTRIBUTING.md)*

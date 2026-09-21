@@ -12,7 +12,7 @@ tags: [cheatsheet, reference]
 
 **Written with**: Claude (Anthropic)
 
-**Version**: 3.41.3 | **Last Updated**: May 2026
+**Version**: 3.43.0 | **Last Updated**: Aug 30, 2026
 
 ---
 
@@ -49,7 +49,7 @@ The ~35 below are the daily drivers. Claude Code ships about 100 built-in comman
 | `/focus` | Toggle minimal focus view, separate from Ctrl+O (v2.1.110) |
 | `/fewer-permission-prompts` | Scan transcripts and propose a read-only tool allowlist (shipped as `/less-permission-prompts` in v2.1.111) |
 | `/btw [question]` | Side question overlay: read-only ephemeral agent, no history pollution, no tools |
-| `/loop [interval] [prompt]` | Run a prompt on repeat (ex: `/loop 5m check the deploy`, default 10m) |
+| `/loop [interval] [prompt]` | Repeat on a fixed interval, or let Claude choose the interval when omitted; recurring tasks expire after 7 days (see scheduling reference) |
 | `/usage` (`/cost`, `/stats`) | Token + cost usage per model, plan limits, activity graph (merged in v2.1.118) |
 | `/ultrareview` | Multi-agent cloud code review, now an alias of `/code-review ultra` (v2.1.114) |
 | `/goal [condition]` | Autonomous multi-turn mode: Claude works until condition is met, live overlay shows elapsed/turns/tokens (v2.1.139) |
@@ -104,7 +104,7 @@ The ~35 below are the daily drivers. Claude Code ships about 100 built-in comman
 | **Tasks API** | v2.1.16 | Persistent task lists with dependencies |
 | **Background Agents** | v2.0.60 | Sub-agents work while you code. Since v2.1.232 forking is the default: a `subagent_type: "fork"` agent inherits the full conversation and prompt cache, and non-teammate spawns go background on their own |
 | **Agent Teams** | v2.1.32 | Multi-agent coordination (TeamCreate/SendMessage) |
-| **Cross-Session Messaging** | v2.1.224 | Sessions message each other across all your machines. `ListAgents` to discover, `SendMessage` to talk, `@name` to mention (v2.1.232). macOS and Linux |
+| **Cross-Session Messaging** | v2.1.224 | Sessions message each other across all your machines. `ListAgents` to discover, `SendMessage` to talk, `@name` to mention (v2.1.232). macOS, Linux, Windows (v2.1.234+). [Full guide →](./workflows/cross-session-messaging.md) |
 | **Self-Hosted Environments** | v2.1.224 | `claude self-hosted-runner` makes your own machine or container the place web, mobile, and desktop sessions execute. Team and Enterprise |
 | **Auto-Memories** | v2.1.32 | Automatic cross-session context capture |
 | **Session Forking** | v2.1.19 | Rewind + create parallel timeline |
@@ -116,11 +116,11 @@ The ~35 below are the daily drivers. Claude Code ships about 100 built-in comman
 | **Cloud Scheduled Tasks** | 2026 | Machine-off scheduling via `/schedule` or `claude.ai/code/scheduled`. Runs on Anthropic infra, clones repo fresh each run, min 1h interval. Pro/Max/Team/Enterprise |
 | **Desktop Scheduled Tasks** | 2026 | Local machine scheduling via Desktop app. Min 1 min, full local file access, no session required |
 | **Skill Evals** | Mar 2026 | Two skill types: Capability Uplift (fills model gap, fades) / Encoded Preference (encodes workflow, stays). Benchmark Mode, A/B testing, Trigger Tuning. |
-| **Output Styles** | v2.1.108 | `/config` → "Preferred output style": **Default** (concise), **Explanatory** (adds design rationale), **Learning** (pair-programming, `TODO(human)` markers). Custom styles via `.claude/styles/`. |
+| **Output Styles** | v2.1.108 | `/config` → "Preferred output style": **Default** (concise), **Explanatory** (adds design rationale), **Learning** (pair-programming, `TODO(human)` markers). Custom styles via `.claude/output-styles/`; use `keep-coding-instructions: true` for coding-oriented styles. |
 
 **Activate LSP**: Add to `~/.claude/settings.json` → `{ "env": { "ENABLE_LSP_TOOL": "1" } }` (requires LSP server installed for your language: `tsserver`, `pylsp`, `gopls`, `rust-analyzer`, `sourcekit-lsp`...)
 
-**Pro tip**: These aren't "secrets"—they're in the [CHANGELOG](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md). Read it!
+**Pro tip**: These are public, documented in the [CHANGELOG](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md). Read it!
 
 ---
 
@@ -236,13 +236,28 @@ Model: Sonnet | Ctx: 89.5k | Cost: $2.11 | Ctx(u): 56.0%
 
 | Concept | Key Point |
 |---------|-----------|
-| **Master Loop** | Simple `while(tool_call)` — no DAGs, no classifiers |
+| **Master Loop** | Simple `while(tool_call)`: no DAGs, no classifiers |
 | **Tools** | 8 core: Bash, Read, Edit, Write, Grep, Glob, Agent, TodoWrite ([full 40-tool reference](./core/tools-reference.md)) |
 | **Context** | ~200K tokens, auto-compacts at 75-92% |
 | **Sub-agents** | Isolated context, max depth=1 |
-| **Philosophy** | "Less scaffolding, more model" — trust Claude's reasoning |
+| **Philosophy** | "Less scaffolding, more model" (trust Claude's reasoning) |
 
 **Deep dive**: [Architecture & Internals](./core/architecture.md)
+
+---
+
+## Harness Choice in Four Layers
+
+| Layer | Owns | Start here |
+|-------|------|------------|
+| Model | Reasoning and tool-call proposals | [Glossary](https://cc.bruniaux.com/guide/glossary/) |
+| Runtime harness | Tool loop, permissions, and recovery | [Agent Harness Engineering](https://cc.bruniaux.com/guide/agent-harness/) |
+| Repository harness | Instructions, task state, and verification | [Repository Harness Engineering](https://cc.bruniaux.com/guide/ultimate-guide/09-advanced-patterns/#925-harness-engineering) |
+| Orchestrator | Coordination between runtimes or sessions | [Agent Tools](https://cc.bruniaux.com/guide/agentic-tools/) |
+
+Choose the smallest control structure that safely solves the need: a bounded loop for one repeated task; an explicit graph for routing, joins, parallelism, interruption, or durable recovery; a repository harness for repeatable project behavior; and an orchestrator for several runs or queues. Specify success, failure, timeout, budget, and escalation before execution. See [Loop & Graph Engineering](https://cc.bruniaux.com/guide/loop-graph-engineering/) and compare products in the [Agent Harness Map](https://cc.bruniaux.com/guide/agent-harness-landscape/).
+
+Evaluate the exact model-harness pair for a bounded coding task. Introduce orchestration only when coordination is the constraint. A harness optimizer sits outside the four operating layers and changes candidate harnesses under a separate evaluation protocol.
 
 ---
 
@@ -266,7 +281,7 @@ Model: Sonnet | Ctx: 89.5k | Cost: $2.11 | Ctx(u): 56.0%
 
 **Cost tip**: For simple tasks, Alt+T to disable thinking → faster & cheaper.
 
-**Per-skill effort** — add `effort: low` to mechanical skills (commit, sync, scaffold) and `effort: high` to analytical ones (security-audit, architecture-review). Overrides session setting automatically.
+**Per-skill effort**: add `effort: low` to mechanical skills (commit, sync, scaffold) and `effort: high` to analytical ones (security-audit, architecture-review). Overrides session setting automatically.
 
 **OpusPlan workflow**: `/model opusplan` → `Shift+Tab × 2` (plan with Opus) → `Shift+Tab` (execute with Sonnet)
 
@@ -362,7 +377,7 @@ tools: Read, Write, Edit, Bash
 # Instructions here
 ```
 
-### Skill — user-invocable (`.claude/skills/my-command/SKILL.md`)
+### Skill: user-invocable (`.claude/skills/my-command/SKILL.md`)
 ```markdown
 ---
 description: Brief description
@@ -472,7 +487,8 @@ VERIFY: Empty email shows error, invalid format shows error
 | `--permission-mode plan` | Plan mode |
 | `--tools "Tool1,Tool2"` | Enable specific tools for session |
 | `--max-budget-usd 5.00` | Max API spend limit (print mode) |
-| `--system-prompt "..."` | Append custom system prompt |
+| `--system-prompt "..."` | Replace the entire default system prompt |
+| `--append-system-prompt "..."` | Append text to the default system prompt |
 | `--worktree` / `-w` | Run in isolated git worktree |
 | `--dangerously-skip-permissions` | Auto-accept (use carefully) |
 | `--debug` | Debug output |
@@ -524,9 +540,9 @@ claude -p "fix typos" --dangerously-skip-permissions
 
 ---
 
-## Remote Control — Mobile Access (v2.1.51+, Research Preview)
+## Remote Control: Mobile Access (v2.1.51+, Research Preview)
 
-> **Pro/Max only** — not available on Team, Enterprise, or API keys
+> **Pro/Max only**: not available on Team, Enterprise, or API keys
 
 ```bash
 # Start from terminal (new session)
@@ -615,7 +631,7 @@ CLAUDE_CODE_ENABLE_TASKS=false claude
 4. **Plan Mode first** for complex/risky tasks
 5. **Create CLAUDE.md** for every project
 6. **Commit frequently** after each completed task
-7. **Know what's sent** — prompts, files, MCP results → Anthropic ([opt-out training](https://claude.ai/settings/data-privacy-controls))
+7. **Know what's sent**: prompts, files, MCP results → Anthropic ([opt-out training](https://claude.ai/settings/data-privacy-controls))
 
 ---
 
@@ -712,4 +728,4 @@ Speed: `rg` (~20ms) → Serena (~100ms) → ast-grep (~200ms) → grepai (~500ms
 
 **Author**: Florian BRUNIAUX | [@Méthode Aristote](https://methode-aristote.fr) | Written with Claude
 
-*Last updated: May 2026 | Version 3.41.3*
+*Last updated: Aug 30, 2026 | Version 3.43.0*

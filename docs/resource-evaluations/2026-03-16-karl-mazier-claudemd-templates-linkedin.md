@@ -1,4 +1,4 @@
-# Resource Evaluation: Karl MAZIER — LinkedIn post on CLAUDE.md structure + reizam/claude-md-templates
+# Resource Evaluation: Karl MAZIER: LinkedIn post on CLAUDE.md structure + reizam/claude-md-templates
 
 **Source**: LinkedIn post (Karl MAZIER) + https://github.com/reizam/claude-md-templates
 **Author**: Karl MAZIER (co-founder, Open Source & SaaS, YC)
@@ -100,7 +100,7 @@ The evaluation correctly separates the paper (already covered) from the packagin
 - **Action**: No integration — the underlying paper is already queued (2026-02-19 evaluation). Note the "write only what the agent can't discover" formulation for possible wording improvement in context-engineering.md.
 - **Confidence**: High
 
-**Cross-reference**: `/Users/florianbruniaux/Sites/perso/claude-code-ultimate-guide/docs/resource-evaluations/agents-md-empirical-study-2602-11988.md` — the paper this post summarizes, already evaluated at 4/5 with full integration plan.
+**Cross-reference**: `docs/resource-evaluations/agents-md-empirical-study-2602-11988.md` — the paper this post summarizes, already evaluated at 4/5 with full integration plan.
 
 ---
 

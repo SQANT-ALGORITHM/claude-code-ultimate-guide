@@ -8,7 +8,7 @@ tags: [guide, community, insights]
 
 This page collects paraphrased field reports from engineers and technology leads who have built production systems with LLMs and agentic tooling. These are practitioner accounts, not vendor documentation. Every insight is attributed to its source.
 
-The corpus now spans five sources on this page. [IFTTD](https://www.ifttd.io/) (If This Then Dev), a French tech podcast hosted by Bruno Soulez covering practical software engineering, remains the largest with episodes 290 to 361 (roughly 2024-2025) and verbatim transcripts for 55 recent episodes. Devoxx adds talks from its Java/JVM and architecture conference family, Dev With AI contributes from a French AI-native development meetup, and ByteByteGo covers system design. Stanford Online supplies academic coursework on machine learning and large language models. Every talk and episode across the five sources was analyzed for patterns applicable to Claude Code workflows and paraphrased; no direct quotes appear on this page. A sixth source, The Product Crew (a French product-management podcast), was analyzed for the same project but its insights are folded into the guide's adoption, roles, and unit-economics pages instead, since none of its material fit this page's themes; see [credits.md](../core/credits.md) for that attribution.
+This page selects material from IFTTD, Devoxx, Dev With AI, ByteByteGo, Stanford Online and Pavan Belagatti's 2026 videos. It is not a representative survey of engineering teams. The September 2026 update checks six additional public IFTTD transcripts: episodes 362, 363, 364, 371, 372 and 373, identified through Bruno Soulez's [2025-2026 season synthesis](https://bilan.ifttd.io/). Episode-specific accounts and the synthesis are not independent sources. All entries are English paraphrases; practitioner observations, predictions and this guide's proposed applications are distinguished. The Product Crew supplies related evidence in the adoption and economics pages; see [credits.md](../core/credits.md).
 
 ---
 
@@ -98,7 +98,25 @@ The corpus now spans five sources on this page. [IFTTD](https://www.ifttd.io/) (
 
 ---
 
+**A shared context layer needs provenance and revocation, not only retrieval.** Centralizing documentation, service relationships, runtime state, and ownership data can reduce tool fragmentation. The same layer can propagate stale or poisoned data to every connected agent. Treat freshness, source identity, scoped access, and rollback as part of the context contract rather than assuming that one shared catalog is authoritative.
+
+*Pavan Belagatti, [Context Engineering Explained](https://www.youtube.com/watch?v=oExfgB9zRzA), 2026. The video demonstrates a Port-oriented architecture; the risk boundary is this guide's analysis, not a claim measured in the video.*
+
+---
+
 ## Agentic Patterns & Orchestration
+
+**A software factory is an operating model, not a product category alone.** The model, runtime harness, repository gates, orchestrator, and accountable humans own different decisions. A managed platform can package those layers, but it does not remove the need to define who writes intent, who accepts evidence, who handles exceptions, and who can release an irreversible change.
+
+*Pavan Belagatti, [What Is a Software Factory?](https://www.youtube.com/watch?v=0nM1ygBm8tA) and [Build Your Own Software Factory](https://www.youtube.com/watch?v=pE1S1egMrAI), 2026*
+
+---
+
+**Removing the operator from repeated prompting does not remove human governance.** Loop engineering can automate planning, action, observation, and retry within a budget. Humans still own permissions, acceptance policy, exceptions, and high-impact releases. Separating the execution loop from the governance loop resolves the apparent conflict between unattended iteration and human approval gates.
+
+*Pavan Belagatti, [Loop Engineering Explained](https://www.youtube.com/watch?v=RvG7R0Ue1k4) and the [human review gate in Build Your Own Software Factory](https://www.youtube.com/watch?v=pE1S1egMrAI&t=908s), 2026*
+
+---
 
 **One agent, one task.** A single agent that accumulates prompt additions over time degrades in unpredictable ways: fixing one behavior inadvertently breaks another. The alternative is small, focused agents with narrow instructions and explicit tool sets. Each agent becomes independently testable, observable, and replaceable.
 
@@ -190,7 +208,25 @@ The corpus now spans five sources on this page. [IFTTD](https://www.ifttd.io/) (
 
 ---
 
+**Balance the production flow before increasing authoring.** Hmito describes faster code generation moving pressure onto review. He proposes using observed defects to improve upstream context, methods and conception rather than building a stock of code that nobody can assess. He explicitly does not claim to have solved the volume problem. The guide applies this framing through a proposed [review admission policy](../core/loop-graph-engineering.md#limit-admission-to-verification-capacity), whose effectiveness still requires local measurement.
+
+*Yacine Hmito (VP of Technology, Fabriq), [IFTTD ep 362](https://www.ifttd.io/episodes/le-lean-a-l-ere-de-l-ia)*
+
+---
+
+**A fixed outer workflow can contain dynamic agent decisions.** Mathieu describes Kestra workflows that expose named flows as agent tools while preserving the surrounding declared process. Limiting the available flows makes the action surface explicit; it does not make every model decision deterministic or establish a general reliability improvement.
+
+*Loïc Mathieu (Kestra), [IFTTD ep 363](https://www.ifttd.io/episodes/kestra)*
+
+---
+
 ## LLM Evaluation
+
+**A dashboard or a fast demonstration is not an outcome study.** Claims such as root-cause analysis in seconds, tenfold productivity, or an entire SDLC automated need a task denominator, baseline, repeated runs, failure distribution, human review time, and cost. Without those fields, the result remains a product demonstration even when the workflow executes successfully.
+
+*Pavan Belagatti, [Become a 10x Developer](https://www.youtube.com/watch?v=6VBhFq5SJ0s) and [DORA Dashboard](https://www.youtube.com/watch?v=nqdSoLq_Qe0), 2026. The measurement requirements are this guide's evidence boundary.*
+
+---
 
 **Evaluation is a scored dataset, not a red/green test.** Unit tests that pass or fail deterministically do not apply to probabilistic outputs. Instead, build a dataset of inputs paired with expected outputs, run a scoring function, and track the score over time. The goal is moving from 85% to 87% to 89%, not achieving a binary pass state.
 
@@ -338,6 +374,18 @@ The corpus now spans five sources on this page. [IFTTD](https://www.ifttd.io/) (
 
 ---
 
+**Allocate autonomy by the effects of the task.** Burgy distinguishes potentially sensitive security changes, for which he wants human validation, from lower-impact website optimization he wants agents to perform more independently. This is his proposed allocation, not proof that SEO changes are harmless or that the described autonomy is validated in production.
+
+*Pierre Burgy (Strapi), [IFTTD ep 364](https://www.ifttd.io/episodes/strapi)*
+
+---
+
+**Unchecked contributions can move work onto maintainers.** De Marmiesse describes generated issues and pull requests whose authors have not checked their quality. He predicts that trust and responsibility for maintenance will matter more as code becomes cheaper to produce. This is a field account and prediction, not a measured open-source-wide trend. The [contribution workflow](../workflows/ai-assisted-open-source-contributions.md) turns that concern into a proposed evidence packet for authors.
+
+*Gabriel de Marmiesse (Kyutai), [IFTTD ep 372](https://www.ifttd.io/episodes/dev-ai)*
+
+---
+
 ## DevX & Adoption
 
 **Treat the agent as a new developer who needs onboarding.** An agent given a well-maintained AGENTS.md file and up-to-date rules about how your codebase works (database connection patterns, message bus encoding, naming conventions) produces dramatically better output than one dropped into an undocumented codebase. At ManoMano, a dedicated platform team maintains skills and rules so agents understand the internal architecture. The agent-facing documentation is now better maintained than the team's Confluence wiki.
@@ -412,11 +460,23 @@ The corpus now spans five sources on this page. [IFTTD](https://www.ifttd.io/) (
 
 ---
 
+**Opening contribution does not remove engineering responsibility.** Gerlic describes Alan's Everyone Can Build initiative using existing engineering tools and review, with an initial frontend scope excluding backend and database changes. All pull requests in that process, including typo fixes, received Engineering review. He reports around 280 merged contributions in a quarter, without a comparative measurement of total team effort. His ambition for a future closed feedback loop is not the achieved behavior of this initial workflow.
+
+*Alexandre Gerlic (VP of Engineering, Alan), [IFTTD ep 371](https://www.ifttd.io/episodes/everyone-can-build)*
+
+---
+
+**A technically working interaction can fail the user's task.** Buendé recounts proposing a chatbot to field engineers accustomed to paper manuals. Their search-like usage did not supply the conversational context the system needed. The case motivates observing actual work before selecting an interface. It is not a general comparison of chat and search, and the account does not establish that this engagement happened at her current employer.
+
+*Léa Buendé (Forward-Deployed Engineer, Adobe), [IFTTD ep 373](https://www.ifttd.io/episodes/forward-deployed-engineer)*
+
+---
+
 ## Sources
 
 ### IFTTD Podcast
 
-[IFTTD](https://www.ifttd.io/) is a French tech podcast hosted by Bruno Soulez. The episodes cited on this page were recorded between 2024 and 2025. Transcripts were analyzed and paraphrased; no direct quotes appear on this page.
+[IFTTD](https://www.ifttd.io/) is a French tech podcast hosted by Bruno Soulez. The selection includes older episodes and the 2025-2026 season. The six additions numbered 362, 363, 364, 371, 372 and 373 were checked in the public transcript tabs on September 9, 2026. Transcription spelling can be imperfect; the entries paraphrase the relevant passages rather than presenting audio-verified quotations.
 
 | Episode | Guest | Role / Company | Theme |
 |---------|-------|---------------|-------|
@@ -431,6 +491,12 @@ The corpus now spans five sources on this page. [IFTTD](https://www.ifttd.io/) (
 | [ep 357](https://www.ifttd.io/episodes/azure-et-ia) | Antonio Goncalves | Java Champion, dev advocate | Model routing |
 | [ep 360](https://www.ifttd.io/episodes/docker-sandbox) | Guillaume Lours | Software Engineer, Docker | Agent sandboxing |
 | [ep 361](https://www.ifttd.io/episodes/rag) | Guillaume Laforge | Developer Advocate, Google Cloud | RAG & context |
+| [ep 362](https://www.ifttd.io/episodes/le-lean-a-l-ere-de-l-ia) | Yacine Hmito | VP of Technology, Fabriq | Lean, quality and flow |
+| [ep 363](https://www.ifttd.io/episodes/kestra) | Loïc Mathieu | Kestra | Declared workflows and dynamic agents |
+| [ep 364](https://www.ifttd.io/episodes/strapi) | Pierre Burgy | Strapi | Task-scoped autonomy |
+| [ep 371](https://www.ifttd.io/episodes/everyone-can-build) | Alexandre Gerlic | VP of Engineering, Alan | Contribution and review |
+| [ep 372](https://www.ifttd.io/episodes/dev-ai) | Gabriel de Marmiesse | Kyutai | Maintainer workload and trust |
+| [ep 373](https://www.ifttd.io/episodes/forward-deployed-engineer) | Léa Buendé | FDE, Adobe | Field adoption |
 
 ### Devoxx
 
@@ -490,6 +556,19 @@ Stanford Online publishes academic coursework on machine learning and large lang
 | CS230 Lecture 8 | Stanford Online | In-context learning vs. fine-tuning |
 | CS336 Lecture 12 | Stanford Online | Evaluation metrics |
 | ISLR (Hastie & Tibshirani) | Stanford textbook / course | Verifying LLM necessity |
+
+### Pavan Belagatti YouTube Corpus
+
+The 62 English-language videos published in 2026 were analyzed from local WebVTT transcripts. They provide practical demonstrations of agentic workflows, context engineering, loop engineering, and software factories. Port appears repeatedly as the implementation platform, so these videos are treated as vendor-oriented practitioner material rather than independent architectural validation. Timestamped quotations used elsewhere in the guide were checked against the corresponding transcript.
+
+| Video | Theme | Evidence boundary |
+|---|---|---|
+| [Build Your Own Software Factory](https://www.youtube.com/watch?v=pE1S1egMrAI) | SDLC workflow, human gates, rollback, feedback | Configured Port workflow; no comparative reliability or cost study |
+| [What Is a Software Factory?](https://www.youtube.com/watch?v=0nM1ygBm8tA) | Agent execution and human gates | Short conceptual framing |
+| [Loop Engineering Explained](https://www.youtube.com/watch?v=RvG7R0Ue1k4) | Repeated execution without manual reprompting | Emerging practitioner term, not a standard |
+| [Context Engineering Explained](https://www.youtube.com/watch?v=oExfgB9zRzA) | Shared context layer | Benefits asserted without measured failure distribution |
+| [Deep Agents Hands-On](https://www.youtube.com/watch?v=K7G_FFZ9jHY) | Planning, delegation, persistent filesystem | Product tutorial, not a harness benchmark |
+| [Traditional RAG vs GraphRAG](https://www.youtube.com/watch?v=Gbztrb_Yabs) | GraphRAG comparison | One example scored by an LLM judge; no general superiority claim |
 
 ---
 

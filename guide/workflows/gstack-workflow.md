@@ -1,6 +1,6 @@
 ---
 title: "Cognitive Mode Switching"
-description: "Switch between specialist roles across your ship cycle — strategic gate, architecture, paranoid review, release, browser QA, retrospective"
+description: "Switch between specialist roles across your ship cycle: strategic gate, architecture, paranoid review, release, browser QA, retrospective"
 tags: [workflow, skills, planning, review, shipping, browser-automation]
 ---
 
@@ -27,7 +27,7 @@ One generic assistant blurs all phases together. This pattern gives each phase a
 /retro            → How well did we ship this week?
 ```
 
-The insight is that planning, reviewing, and shipping require fundamentally different cognitive postures — and a single assistant left in generic mode will blend them badly.
+Planning, reviewing, and shipping require fundamentally different cognitive postures. A single assistant left in generic mode blends them badly.
 
 ---
 
@@ -61,9 +61,9 @@ If you run `/plan-ceo-review` first, the assistant is explicitly asked to challe
 That is a different feature. A better one. And you only get it by inserting an explicit gate before implementation starts.
 
 **The three modes inside `/plan-ceo-review`**:
-- **SCOPE EXPANSION** — find the 10-star product, ask "what would make this 10x better for 2x the effort?"
-- **HOLD SCOPE** — accept the direction, make the plan bulletproof
-- **SCOPE REDUCTION** — strip to the minimum viable version ruthlessly
+- **SCOPE EXPANSION**: find the 10-star product, ask "what would make this 10x better for 2x the effort?"
+- **HOLD SCOPE**: accept the direction, make the plan bulletproof
+- **SCOPE REDUCTION**: strip to the minimum viable version ruthlessly
 
 The user selects the mode. The assistant commits to it and does not drift.
 
@@ -206,13 +206,13 @@ For team installs (committed to repo so `git clone` just works for teammates), s
 | Browser automation, multi-step QA loop | `/browse` | MCP tools (slower) |
 | Want structured ADR learning loop | [Plan Pipeline](./plan-pipeline.md) | — |
 
-The main differentiator from [Plan Pipeline](./plan-pipeline.md): gstack is a linear gear sequence you control manually. Plan Pipeline is a more automated orchestration with ADR memory and parallel agent teams. For solo developers who want explicit control over each phase, gstack is faster to adopt.
+gstack is a linear gear sequence you control manually; [Plan Pipeline](./plan-pipeline.md) is a more automated orchestration with ADR memory and parallel agent teams. For solo developers who want explicit control over each phase, gstack is faster to adopt.
 
 ---
 
 ## See Also
 
-- [Plan Pipeline](./plan-pipeline.md) — Automated 3-command workflow with ADR learning loop
-- [Plan-Driven Development](./plan-driven.md) — Fundamentals of planning before coding
-- [Iterative Refinement](./iterative-refinement.md) — Quality improvement cycles
-- [gstack on GitHub](https://github.com/garrytan/gstack) — Source, install instructions, full skill prompts
+- [Plan Pipeline](./plan-pipeline.md): Automated 3-command workflow with ADR learning loop
+- [Plan-Driven Development](./plan-driven.md): Fundamentals of planning before coding
+- [Iterative Refinement](./iterative-refinement.md): Quality improvement cycles
+- [gstack on GitHub](https://github.com/garrytan/gstack): Source, install instructions, full skill prompts

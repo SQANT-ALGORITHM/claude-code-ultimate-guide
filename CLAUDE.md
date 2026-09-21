@@ -53,7 +53,7 @@ claudedocs/               # Claude working documents (gitignored)
 
 | File | Purpose |
 |------|---------|
-| `VERSION` | Single source of truth for version (currently 3.41.3) |
+| `VERSION` | Single source of truth for version (currently 3.42.0) |
 | `guide/ultimate-guide.md` | The main reference (search here first) |
 | `guide/cheatsheet.md` | Quick reference for daily use |
 | `machine-readable/reference.yaml` | LLM-optimized index with line numbers |
@@ -147,16 +147,25 @@ These rules come from observed friction patterns in actual sessions on this repo
 After any file modification or feature implementation, update `CHANGELOG.md` under `[Unreleased]`. Never skip this step unless explicitly told to. This is the most common missed step.
 
 ### Be exhaustive on first pass
-When asked to analyze, audit, or review anything — read every relevant file. Do not do a superficial scan. If unsure of scope, ask rather than delivering shallow results. This applies to resource evaluations, doc audits, and codebase reviews.
+When asked to analyze, audit, or review anything, read every relevant file. Do not do a superficial scan. If unsure of scope, ask rather than delivering shallow results. This applies to resource evaluations, doc audits, and codebase reviews.
 
-### Use absolute paths
-When referencing files in documentation, reports, or resource evaluations, always use full absolute paths. Never relative paths.
+### Public content must be portable
+
+Apply this rule to guides, evaluations, examples, changelogs, indexes, exports, and landing content, including code blocks, tables, captions, and link targets.
+
+1. Use repository-relative paths for files distributed with the project and verified public URLs for external sources. Give commands a clear starting directory, such as the cloned repository root.
+2. Never publish personal home directories, temporary checkout paths, private workspace locations, local file URLs, or private notes and correspondence as reader-accessible evidence. Check copied logs and generated content too. If no public source exists, state the evidence limitation or omit the reference; never invent a replacement URL.
+3. Omit audit bookkeeping such as "Local source" columns and standalone revision-hash tables. Use public source permalinks when provenance matters. Display a version or hash only when readers need it to reproduce a command or understand version-specific behavior.
+4. Use generic placeholders such as `/path/to/project` when an absolute path is necessary for an example. Preserve real system paths when they are the subject of the explanation.
+5. Reserve absolute workstation paths for private task reports and clickable local-file references to the user. They do not belong in committed public content.
+
+Before publishing, run `python3 scripts/check-public-paths.py`. Include the built landing using the script's dist option when applicable. The detector covers path patterns; manually review source accessibility and unnecessary revision metadata.
 
 ### Closing checklist
 After completing all requested tasks, always confirm unprompted:
 1. Files changed (list them)
 2. CHANGELOG.md updated
-3. Committed and pushed (if applicable) — include the commit hash
+3. Committed and pushed (if applicable): include the commit hash
 
 ### Bias toward action
 Do not spend extended time in exploration or planning loops. Produce files and concrete output early, then iterate. If stuck for more than 2 attempts on any step, explain the blocker instead of looping.

@@ -4,10 +4,10 @@ subtitle: "Choosing the right isolation level for your context"
 card-number: "T17"
 category: "Technical"
 difficulty: "advanced"
-guide-version: "3.41.0"
+guide-version: "3.41.3"
 author: "Florian BRUNIAUX"
-version: "3.41.0"
-date: "May 2026"
+version: "3.41.3"
+date: "August 2026"
 layout: "two-col"
 lang: en
 format:
@@ -16,7 +16,7 @@ format:
 
 ## Two local isolation approaches
 
-Claude Code offers two isolation mechanisms for autonomous execution. The native sandbox is built into the CLI and relies on OS primitives. Docker Sandboxes (Docker Desktop 4.58+) use microVM isolation via hypervisor — more robust but heavier.
+Claude Code offers two isolation mechanisms for autonomous execution. The native sandbox is built into the CLI and relies on OS primitives. Docker Sandboxes (Docker Desktop 4.58+) use microVM isolation via hypervisor, more robust but heavier.
 
 ## Comparison table
 

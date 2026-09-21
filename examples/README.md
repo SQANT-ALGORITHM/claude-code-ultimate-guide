@@ -8,7 +8,7 @@ tags: [template, reference, workflows, architecture]
 
 Annotated templates that teach you **why** patterns work, not just how to configure them. Each template includes comments explaining trade-offs, alternatives, and when to deviate.
 
-> **[📚 Browse Auto-Generated Catalog](./CATALOG.md)** — Indexed by complexity, time, domain (181 templates)  
+> **[📚 Browse Auto-Generated Catalog](./CATALOG.md)**: Indexed by complexity, time, and domain (238 templates across six catalog categories; 271 production templates overall)
 > **[🔍 Browse Interactive Catalog](./index.html)** — View, copy, and download templates with syntax highlighting
 
 ## New: Auto-Generated Catalog
@@ -41,17 +41,17 @@ keywords: [tag1, tag2]
 |--------|-------------|-------|
 | [`agents/`](./agents/) | Custom AI personas for specialized tasks | 21 + 2 collections |
 | [`commands/`](./commands/) | Slash commands (workflow automation) | 52 |
-| [`hooks/`](./hooks/) | Event-driven security & automation scripts | 37 |
-| [`skills/`](./skills/) | Reusable knowledge modules — [9 on SkillHub](https://skills.palebluedot.live/owner/FlorianBruniaux) | 68 |
+| [`hooks/`](./hooks/) | Event-driven security and automation scripts | 39 catalog entries |
+| [`skills/`](./skills/) | Reusable knowledge modules, including [9 on SkillHub](https://skills.palebluedot.live/owner/FlorianBruniaux) | 118 catalog entries |
 | [`claude-md/`](./claude-md/) | CLAUDE.md configuration profiles | 7 |
 | [`config/`](./config/) | Settings, MCP, git templates | 6 |
 | [`memory/`](./memory/) | CLAUDE.md memory file templates | 1 |
 | [`rules/`](./rules/) | Behavioral rules for common review patterns | 5 |
 | [`scripts/`](./scripts/) | Diagnostic & utility scripts | 17 |
 | [`team-config/`](./team-config/) | Team onboarding templates | 3 |
-| [`templates/`](./templates/) | Session and workflow templates | 1 |
+| [`templates/`](./templates/) | Session and workflow templates | 2 |
 | [`github-actions/`](./github-actions/) | CI/CD workflows | 6 |
-| [`workflows/`](./workflows/) | Advanced development workflows | 3 |
+| [`workflows/`](./workflows/) | Advanced development workflows, including bounded loops and review admission | 5 |
 | [`plugins/`](./plugins/) | Community plugins (SE-CoVe, claude-mem) | 2 |
 | [`integrations/`](./integrations/) | External tool integrations (Agent Vibes TTS) | 3 |
 | [`context-engineering/`](./context-engineering/) | Context engineering patterns and profiles | 10 |
@@ -59,6 +59,14 @@ keywords: [tag1, tag2]
 | [`modes/`](./modes/) | Behavioral modes (SuperClaude) | 1 |
 | [`semantic-anchors/`](./semantic-anchors/) | Precise vocabulary for better LLM outputs | 1 |
 | [`multi-provider/`](https://github.com/FlorianBruniaux/cc-copilot-bridge) | Multi-provider bridge → dedicated repo | — |
+
+## Contribution, review capacity and comprehension
+
+- [AI-assisted contribution packet](templates/ai-assisted-contribution.md): evidence and author explanation before submission
+- [Review admission worksheet](workflows/review-admission.md): shared capacity, pause/resume rules and a tabletop exercise
+- [Review comprehension exercise](learning-project/review-comprehension-exercise.md): explain, perturb, diagnose and escalate
+
+These worksheets are proposed procedures. Their examples do not establish runtime enforcement or measured learning and throughput gains.
 
 ## Quick Start
 

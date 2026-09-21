@@ -4,10 +4,10 @@ subtitle: "Quand résumer et quand réinitialiser le contexte"
 card-number: "M04"
 category: "Méthodologie"
 difficulty: "beginner"
-guide-version: "3.41.0"
+guide-version: "3.41.3"
 author: "Florian BRUNIAUX"
-version: "3.41.0"
-date: "Mai 2026"
+version: "3.41.3"
+date: "Août 2026"
 layout: "two-col"
 lang: fr
 format:
@@ -23,7 +23,7 @@ format:
 | Libération contexte | ~40-50% | 100% |
 | Quand utiliser | En cours de tâche | Changement de sujet |
 
-La distinction fondamentale : `/compact` compresse sans couper le fil, `/clear` repart de zéro. Aucun des deux n'est meilleur dans l'absolu, le choix dépend de la situation.
+`/compact` compresse sans couper le fil, `/clear` repart de zéro. Aucun des deux n'est meilleur dans l'absolu, le choix dépend de la situation.
 
 ## Zones de Contexte
 
@@ -35,7 +35,7 @@ La distinction fondamentale : `/compact` compresse sans couper le fil, `/clear` 
         ou /compact en dernier recours
 ```
 
-L'erreur classique : attendre 90% pour faire `/compact`. À ce stade, Claude commence à oublier des instructions et la qualité des réponses baisse. 75% est le bon seuil.
+Attendre 90% pour faire `/compact` est l'erreur classique. À ce stade, Claude commence à oublier des instructions et la qualité des réponses baisse. 75% est le bon seuil.
 
 ## Quand Utiliser `/compact`
 

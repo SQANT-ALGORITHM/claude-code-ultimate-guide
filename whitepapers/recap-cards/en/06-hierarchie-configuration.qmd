@@ -1,13 +1,13 @@
 ---
 title: "Configuration Hierarchy"
-subtitle: "Where to configure what — from global to local"
+subtitle: "Where to configure what, from global to local"
 card-number: "T05"
 category: "Technical"
-guide-version: "3.41.0"
+guide-version: "3.41.3"
 difficulty: "beginner"
 author: "Florian BRUNIAUX"
-version: "3.41.0"
-date: "May 2026"
+version: "3.41.3"
+date: "2026-08-24"
 layout: "two-col"
 lang: en
 format:
@@ -39,11 +39,11 @@ subfolder/CLAUDE.md          (3 - local rules)
 
 Rules at a lower level **supplement** rather than replace higher levels.
 
-## settings.json — Structure
+## settings.json: Structure
 
 ```json
 {
-  "model": "claude-opus-4-5",
+  "model": "claude-sonnet-5",
   "permissions": {
     "allow": ["Bash(git *)"],
     "deny": ["Bash(rm -rf*)"]
@@ -54,7 +54,7 @@ Rules at a lower level **supplement** rather than replace higher levels.
 }
 ```
 
-## CLAUDE.md — Best Practices
+## CLAUDE.md: Best Practices
 
 ```markdown
 # Project Conventions
@@ -72,13 +72,13 @@ Rules at a lower level **supplement** rather than replace higher levels.
 
 ## What Goes Where
 
-**Global CLAUDE.md** — Personal preferences, code style, universal conventions.
+**Global CLAUDE.md**: personal preferences, code style, universal conventions.
 
-**Project CLAUDE.md** — Architecture, stack, team conventions, build/test commands.
+**Project CLAUDE.md**: architecture, stack, team conventions, build/test commands.
 
-**Project settings.json** — Tool permissions, default model, dev environment variables.
+**Project settings.json**: tool permissions, default model, dev environment variables.
 
-**settings.local.json** — Personal overrides that should not affect the team.
+**settings.local.json**: personal overrides that should not affect the team.
 
 ## Required .gitignore
 

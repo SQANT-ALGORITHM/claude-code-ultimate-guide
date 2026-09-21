@@ -4,10 +4,10 @@ subtitle: "Méthodologies de développement structurées avec Claude Code"
 card-number: "M15"
 category: "Méthodologie"
 difficulty: "intermediate"
-guide-version: "3.41.0"
+guide-version: "3.41.3"
 author: "Florian BRUNIAUX"
-version: "3.41.0"
-date: "Mai 2026"
+version: "3.41.3"
+date: "2026-08-24"
 layout: "two-col"
 lang: fr
 format:
@@ -40,7 +40,7 @@ Le cycle classique, rendu explicite dans les prompts pour éviter que Claude ne 
    rester verts."
 ```
 
-Être explicite sur "FAILING" et "n'existe pas encore" est essentiel — sinon Claude tend à écrire test et implémentation ensemble.
+Être explicite sur "FAILING" et "n'existe pas encore" compte, sinon Claude tend à écrire test et implémentation ensemble.
 
 ## BDD avec Claude : Given/When/Then
 
@@ -55,7 +55,7 @@ Le cycle classique, rendu explicite dans les prompts pour éviter que Claude ne 
 #   Then il est redirigé vers son tableau de bord
 ```
 
-L'intérêt : les scénarios servent à la fois de spec, de documentation et de base de test, dans un langage lisible par des non-développeurs.
+Les scénarios servent à la fois de spec, de documentation et de base de test, dans un langage lisible par des non-développeurs.
 
 ## SDD avec Claude : Spec d'abord
 
@@ -89,15 +89,13 @@ Applicable quand la correction du résultat est critique et que les tests automa
 
 ```bash
 # Créer la hiérarchie TDD dans Tasks API
-TaskCreate: { title: "Écrire les tests failing pour auth" }
-TaskCreate: {
-  title: "Implémenter auth pour passer les tests",
+TaskCreate("Écrire les tests failing pour auth")
+TaskCreate("Implémenter auth pour passer les tests", {
   blockedBy: ["task-tests-failing"]
-}
-TaskCreate: {
-  title: "Refactoriser auth",
+})
+TaskCreate("Refactoriser auth", {
   blockedBy: ["task-impl-auth"]
-}
+})
 ```
 
 Le cycle Red-Green-Refactor devient traçable et persistant entre sessions.
